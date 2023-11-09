@@ -1,4 +1,4 @@
-package net.ausiasmarch.taread.bean;
+package net.ausiasmarch.tareas.bean;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -12,7 +12,7 @@ public class UsuarioBean {
         return codigo;
     }
 
-    public void setCodigo(String codigo) {
+    public void setCodigo(Long codigo) {
         this.codigo = codigo;
     }
 

@@ -1,13 +1,12 @@
 package net.ausiasmarch.tareas.entity;
 
+import java.sql.Date;
 import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
@@ -88,6 +87,13 @@ public class ProyectoEntity {
 
     public int getTareas() {
         return tareas.size();
+    }
+
+    public void setUsuario(UsuarioEntity sessionUsuario) {
+    }
+
+    public ProyectoEntity getUsuario() {
+        return null;
     }
 
 }

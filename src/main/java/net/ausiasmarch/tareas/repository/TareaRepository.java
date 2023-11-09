@@ -13,4 +13,6 @@ public interface TareaRepository extends JpaRepository<TareaEntity, Long> {
     @Modifying
     @Query(value = "ALTER TABLE tarea AUTO_INCREMENT = 1", nativeQuery = true)
     void resetAutoIncrement();
+
+    Page<TareaEntity> findByProyectoId(Long proyectoId, Pageable oPageable);
 }

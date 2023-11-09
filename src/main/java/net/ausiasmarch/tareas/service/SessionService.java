@@ -70,7 +70,7 @@ public class SessionService {
     }
 
     public void onlySupervisor() {
-        if (!this.isSueprvisor()) {
+        if (!this.isSupervisor()) {
             throw new UnauthorizedException("Only supervisor can do this");
         }
     }
@@ -110,6 +110,9 @@ public class SessionService {
         } else {
             throw new UnauthorizedException("Only supervisores or usuarios can do this");
         }
+    }
+
+    public void onlyAdmins() {
     }
 
 }

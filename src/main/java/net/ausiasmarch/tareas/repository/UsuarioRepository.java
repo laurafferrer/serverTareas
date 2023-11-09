@@ -10,7 +10,7 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Long> {
 
     Optional<UsuarioEntity> findByCodigo(String codigo);
 
-    Optional<UsuarioEntity> findByCodigoAndPassword(String codigo, String password);
+    Optional<UsuarioEntity> findByCodigoAndPassword(Long codigo, String password);
 
     @Modifying
     @Query(value = "ALTER TABLE user AUTO_INCREMENT = 1", nativeQuery = true)

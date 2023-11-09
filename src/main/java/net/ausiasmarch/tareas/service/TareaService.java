@@ -1,6 +1,5 @@
 package net.ausiasmarch.tareas.service;
 
-import java.util.concurrent.ProyectoLocalRandom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -50,7 +49,7 @@ public class TareaService {
     }
 
     public Long create(TareaEntity oTareaEntity) {
-        oSessionService.onlySupervisorOrUsuarios();
+        oSessionService.onlySupervisoresOrUsuarios();
         oTareaEntity.setId(null);        
         if (oSessionService.isUsuario()) {
             oTareaEntity.setUsuario(oSessionService.getSessionUsuario());
@@ -62,7 +61,7 @@ public class TareaService {
 
     public TareaEntity update(TareaEntity oTareaEntityToSet) {
         TareaEntity oTareaEntityFromDatabase = this.get(oTareaEntityToSet.getId());
-        oSessionService.onlySupervisorOrUsuariosWithIisOwnData(oTareaEntityFromDatabase.getUsuario().getId());
+        oSessionService.onlySupervisoresOrUsuariosWithIisOwnData(oTareaEntityFromDatabase.getUsuario().getId());
         if (oSessionService.isUsuario()) {
             oTareaEntityToSet.setUsuario(oSessionService.getSessionUsuario());
             return oTareaRepository.save(oTareaEntityToSet);
@@ -73,11 +72,11 @@ public class TareaService {
 
     public Long delete(Long id) {
         TareaEntity oTareaEntityFromDatabase = this.get(id);
-        oSessionService.onlySupervisorOrUsuariosWithIisOwnData(oTareaEntityFromDatabase.getUsuario().getId());
+        oSessionService.onlySupervisoresOrUsuariosWithIisOwnData(oTareaEntityFromDatabase.getUsuario().getId());
         oTareaRepository.deleteById(id);
         return id;
     }
-
+/*
     public Long populate(Integer amount) {
         oSessionService.onlySupervisor();
         for (int i = 0; i < amount; i++) {
@@ -86,7 +85,7 @@ public class TareaService {
                     oUsuarioService.getOneRandom(), oService.getOneRandom()));
         }
         return oTareaRepository.count();
-    }
+    }*/
 
     @Transactional
     public Long empty() {
@@ -95,6 +94,10 @@ public class TareaService {
         oTareaRepository.resetAutoIncrement();
         oTareaRepository.flush();
         return oTareaRepository.count();
+    }
+
+    public Object populate(Integer amount) {
+        return null;
     }
 
 }

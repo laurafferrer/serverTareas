@@ -45,10 +45,10 @@ public class UsuarioService {
 
     public UsuarioEntity update(UsuarioEntity oUsuarioEntityToSet) {
         UsuarioEntity oUsuarioEntityFromDatabase = this.get(oUsuarioEntityToSet.getId());
-        oSessionService.onlySupervisorOrUsuariosWithIisOwnData(oUsuarioEntityFromDatabase.getId());
+        oSessionService.onlySupervisoresOrUsuariosWithIisOwnData(oUsuarioEntityFromDatabase.getId());
         if (oSessionService.isUsuario()) {
             oUsuarioEntityToSet.setId(null);
-            oUsuarioEntityToSet.setRole(oUsuarioEntityFromDatabase.getRole());
+            oUsuarioEntityToSet.setPuesto(oUsuarioEntityFromDatabase.getPuesto());
             oUsuarioEntityToSet.setPassword(usuarioPASSWORD);
             return oUsuarioRepository.save(oUsuarioEntityToSet);
         } else {
@@ -65,7 +65,7 @@ public class UsuarioService {
     }
 
     public UsuarioEntity getOneRandom() {
-        oSessionService.onlySupervisores();
+        oSessionService.onlySupervisor();
         Pageable oPageable = PageRequest.of((int) (Math.random() * oUsuarioRepository.count()), 1);
         return oUsuarioRepository.findAll(oPageable).getContent().get(0);
     }
@@ -86,7 +86,7 @@ public class UsuarioService {
         }
         return oUsuarioRepository.count();
     }
-*/
+*//*
     @Transactional
     public Long empty() {
         oSessionService.onlyAdmins();
@@ -99,6 +99,14 @@ public class UsuarioService {
                 "pablomarmol", usuarioPASSWORD, true);
         oUsuarioRepository.save(oUsuarioEntity1);
         return oUsuarioRepository.count();
+    }
+*/
+    public Object populate(Integer amount) {
+        return null;
+    }
+
+    public Object empty() {
+        return null;
     }
 
 }

@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import jakarta.servlet.http.HttpServletRequest;
 import net.ausiasmarch.tareas.entity.ProyectoEntity;
 import net.ausiasmarch.tareas.exception.ResourceNotFoundException;
-import net.ausiasmarch.tareas.helper.DataGenerationHelper;
 import net.ausiasmarch.tareas.repository.ProyectoRepository;
 
 @Service
@@ -37,7 +36,7 @@ public class ProyectoService {
 
     public Long create(ProyectoEntity oProyectoEntity) {
         oProyectoEntity.setId(null);
-        oSessionService.onlySupervisorOrUsuarios();
+        oSessionService.onlySupervisoresOrUsuarios();
         if (oSessionService.isUsuario()) {
             oProyectoEntity.setUsuario(oSessionService.getSessionUsuario());
             return oProyectoRepository.save(oProyectoEntity).getId();
@@ -48,7 +47,7 @@ public class ProyectoService {
 
     public ProyectoEntity update(ProyectoEntity oProyectoEntityToSet) {
         ProyectoEntity oProyectoEntityFromDatabase = this.get(oProyectoEntityToSet.getId());
-        oSessionService.onlySupervisorOrUsuariosWithIisOwnData(oProyectoEntityFromDatabase.getUsuario().getId());
+        oSessionService.onlySupervisoresOrUsuariosWithIisOwnData(oProyectoEntityFromDatabase.getUsuario().getId());
         if (oSessionService.isUsuario()) {
             if (oProyectoEntityToSet.getUsuario().getId().equals(oSessionService.getSessionUsuario().getId())) {
                 return oProyectoRepository.save(oProyectoEntityToSet);
@@ -62,20 +61,21 @@ public class ProyectoService {
 
     public Long delete(Long id) {
         ProyectoEntity oProyectoEntityFromDatabase = this.get(id);
-        oSessionService.onlySupervisorOrUsuariosWithIisOwnData(oProyectoEntityFromDatabase.getUsuario().getId());
+        oSessionService.onlySupervisoresOrUsuariosWithIisOwnData(oProyectoEntityFromDatabase.getUsuario().getId());
         oProyectoRepository.deleteById(id);
         return id;
     }
-
+/*
     public Long populate(Integer amount) {
         oSessionService.onlySupervisor();
         for (int i = 0; i < amount; i++) {
+            ProyectoService oUsuarioService;
             oProyectoRepository
                     .save(new ProyectoEntity(DataGenerationHelper.getSpeech(1), oUsuarioService.getOneRandom()));
         }
         return oProyectoRepository.count();
     }
-
+*/
     public ProyectoEntity getOneRandom() {
         oSessionService.onlySupervisor();
         Pageable oPageable = PageRequest.of((int) (Math.random() * oProyectoRepository.count()), 1);
@@ -89,6 +89,14 @@ public class ProyectoService {
         oProyectoRepository.resetAutoIncrement();
         oProyectoRepository.flush();
         return oProyectoRepository.count();
+    }
+
+    public Object getPage(Pageable oPageable) {
+        return null;
+    }
+
+    public Object populate(Integer amount) {
+        return null;
     }
 
 }

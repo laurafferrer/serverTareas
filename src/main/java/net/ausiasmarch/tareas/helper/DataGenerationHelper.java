@@ -1,6 +1,5 @@
 package net.ausiasmarch.tareas.helper;
 
-import java.text.Normalizer;
 import java.util.Random;
 
 public class DataGenerationHelper {

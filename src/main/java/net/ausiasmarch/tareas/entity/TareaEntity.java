@@ -13,7 +13,7 @@ import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "tarea")
-public class TareasEntity {
+public class TareaEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,20 +32,20 @@ public class TareasEntity {
     @JoinColumn(name = "usuario_id")
     private UsuarioEntity usuario;
 
-    public TareasEntity() {
+    public TareaEntity() {
     }
 
-    public TareasEntity(String nombre) {
+    public TareaEntity(String nombre) {
         this.nombre = nombre;
     }
 
-    public TareasEntity(Long id, String nombre) {
+    public TareaEntity(Long id, String nombre) {
         this.id = id;
         this.nombre = nombre;
     }
 
-    public TareasEntity(String nombre, UsuarioEntity usuario, ProyectoEntity proyecto) {
-        this.title = title;
+    public TareaEntity(String nombre, UsuarioEntity usuario, ProyectoEntity proyecto) {
+        this.nombre = nombre;
         this.usuario = usuario;
         this.proyecto = proyecto;
     }

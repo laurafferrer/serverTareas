@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.ausiasmarch.tareas.entity.UsuarioEntity;
@@ -52,12 +51,12 @@ public class UsuarioApi {
     }
 
     @PostMapping("/populate/{amount}")
-    public ResponseEntity<Long> populate(@PathVariable("amount") Integer amount) {
+    public ResponseEntity<Object> populate(@PathVariable("amount") Integer amount) {
         return ResponseEntity.ok(oUsuarioService.populate(amount));
     }
 
     @DeleteMapping("/empty")
-    public ResponseEntity<Long> empty() {
+    public ResponseEntity<Object> empty() {
         return ResponseEntity.ok(oUsuarioService.empty());
     }
 
