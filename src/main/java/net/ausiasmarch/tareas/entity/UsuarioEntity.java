@@ -46,6 +46,10 @@ public class UsuarioEntity {
     @OneToMany(mappedBy = "usuario", fetch = jakarta.persistence.FetchType.LAZY)
     private List<TareaEntity> tareas;
 
+    public UsuarioEntity() {
+        
+    }
+
     public UsuarioEntity(String username2, String nombre2, String apellidos2, String string, boolean b) {
         tareas = new ArrayList<>();
     }
