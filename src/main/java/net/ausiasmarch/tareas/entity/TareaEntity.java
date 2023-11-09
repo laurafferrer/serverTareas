@@ -50,6 +50,9 @@ public class TareaEntity {
         this.proyecto = proyecto;
     }
 
+    public TareaEntity(String speech, String speech2, UsuarioEntity oneRandom, ProyectoEntity oneRandom2) {
+    }
+
     public Long getId() {
         return id;
     }

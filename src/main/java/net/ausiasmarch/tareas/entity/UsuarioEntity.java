@@ -46,21 +46,20 @@ public class UsuarioEntity {
     @OneToMany(mappedBy = "usuario", fetch = jakarta.persistence.FetchType.LAZY)
     private List<TareaEntity> tareas;
 
-    public UsuarioEntity() {
+    public UsuarioEntity(String username2, String nombre2, String apellidos2, String string, boolean b) {
         tareas = new ArrayList<>();
     }
 
-    public UsuarioEntity(Long id, String username, String nombre, String apellidos, Boolean puesto,
-            String password) {
+    public UsuarioEntity(Long id, String username, String nombre, String apellidos, String password, Boolean puesto) {
         this.id = id;
         this.username = username;
         this.nombre = nombre;
         this.apellidos = apellidos;
-        this.puesto = puesto;
         this.password = password;
+        this.puesto = puesto;
     }
 
-    public UsuarioEntity(String username, String nombre, String apellidos, Boolean puesto, String password) {
+    public UsuarioEntity(String username, String nombre, String apellidos, String password, Boolean puesto) {
         this.username = username;
         this.nombre = nombre;
         this.apellidos = apellidos;

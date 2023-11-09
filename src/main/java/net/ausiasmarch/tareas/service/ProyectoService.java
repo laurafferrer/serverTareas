@@ -9,7 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 import jakarta.servlet.http.HttpServletRequest;
 import net.ausiasmarch.tareas.entity.ProyectoEntity;
 import net.ausiasmarch.tareas.exception.ResourceNotFoundException;
+import net.ausiasmarch.tareas.helper.DataGenerationHelper;
 import net.ausiasmarch.tareas.repository.ProyectoRepository;
+import net.ausiasmarch.tareas.repository.UsuarioRepository;
 
 @Service
 public class ProyectoService {
@@ -18,6 +20,12 @@ public class ProyectoService {
 
     @Autowired
     HttpServletRequest oHttpServletRequest;
+
+    @Autowired
+    UsuarioRepository oUsuarioRepository;
+
+    @Autowired
+    UsuarioService oUsuarioService;
 
     @Autowired
     SessionService oSessionService;
@@ -65,17 +73,16 @@ public class ProyectoService {
         oProyectoRepository.deleteById(id);
         return id;
     }
-/*
+
     public Long populate(Integer amount) {
-        oSessionService.onlySupervisor();
+        oSessionService.onlyAdmins();
         for (int i = 0; i < amount; i++) {
-            ProyectoService oUsuarioService;
             oProyectoRepository
                     .save(new ProyectoEntity(DataGenerationHelper.getSpeech(1), oUsuarioService.getOneRandom()));
         }
         return oProyectoRepository.count();
     }
-*/
+
     public ProyectoEntity getOneRandom() {
         oSessionService.onlySupervisor();
         Pageable oPageable = PageRequest.of((int) (Math.random() * oProyectoRepository.count()), 1);
@@ -94,9 +101,4 @@ public class ProyectoService {
     public Object getPage(Pageable oPageable) {
         return null;
     }
-
-    public Object populate(Integer amount) {
-        return null;
-    }
-
 }

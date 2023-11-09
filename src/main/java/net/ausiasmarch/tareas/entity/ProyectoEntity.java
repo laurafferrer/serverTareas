@@ -53,6 +53,9 @@ public class ProyectoEntity {
         this.fecha_inicio = fecha_inicio;
     }
 
+    public ProyectoEntity(String speech, UsuarioEntity oneRandom) {
+    }
+
     public Long getId() {
         return id;
     }

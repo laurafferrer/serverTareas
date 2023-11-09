@@ -1,5 +1,7 @@
 package net.ausiasmarch.tareas.service;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -76,16 +78,16 @@ public class TareaService {
         oTareaRepository.deleteById(id);
         return id;
     }
-/*
+
     public Long populate(Integer amount) {
-        oSessionService.onlySupervisor();
+        oSessionService.onlyAdmins();
         for (int i = 0; i < amount; i++) {
             oTareaRepository.save(new TareaEntity(DataGenerationHelper.getSpeech(1),
-                    DataGenerationHelper.getSpeech(ProyectoLocalRandom.current().nextInt(5, 25)),
-                    oUsuarioService.getOneRandom(), oService.getOneRandom()));
+                    DataGenerationHelper.getSpeech(ThreadLocalRandom.current().nextInt(5, 25)),
+                    oUsuarioService.getOneRandom(), oProyectoService.getOneRandom()));
         }
         return oTareaRepository.count();
-    }*/
+    }
 
     @Transactional
     public Long empty() {
@@ -94,10 +96,6 @@ public class TareaService {
         oTareaRepository.resetAutoIncrement();
         oTareaRepository.flush();
         return oTareaRepository.count();
-    }
-
-    public Object populate(Integer amount) {
-        return null;
     }
 
 }

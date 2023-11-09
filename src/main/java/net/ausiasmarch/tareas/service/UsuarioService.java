@@ -6,14 +6,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import net.ausiasmarch.tareas.entity.UsuarioEntity;
 import net.ausiasmarch.tareas.exception.ResourceNotFoundException;
+import net.ausiasmarch.tareas.helper.DataGenerationHelper;
 import net.ausiasmarch.tareas.repository.UsuarioRepository;
 
 @Service
 public class UsuarioService {
 
-    private final String usuarioPASSWORD = "123";
+    private final String usuarioPASSWORD = "e2cac5c5f7e52ab03441bb70e89726ddbd1f6e5b683dde05fb65e0720290179e";
 
     @Autowired
     UsuarioRepository oUsuarioRepository;
@@ -66,44 +68,30 @@ public class UsuarioService {
         Pageable oPageable = PageRequest.of((int) (Math.random() * oUsuarioRepository.count()), 1);
         return oUsuarioRepository.findAll(oPageable).getContent().get(0);
     }
-/*
+
     public Long populate(Integer amount) {
         oSessionService.onlyAdmins();
         for (int i = 0; i < amount; i++) {
-            String name = DataGenerationHelper.getRadomName();
-            String surname = DataGenerationHelper.getRadomSurname();
-            String lastname = DataGenerationHelper.getRadomSurname();
-            String email = name.substring(0, 3) + surname.substring(0, 3) + lastname.substring(0, 2) + i
-                    + "@ausiasmarch.net";
+            String nombre = DataGenerationHelper.getRadomName();
+            String apellidos = DataGenerationHelper.getRadomSurname();
             String username = DataGenerationHelper
                     .doNormalizeString(
-                            name.substring(0, 3) + surname.substring(1, 3) + lastname.substring(1, 2) + i);
-            oUsuarioRepository.save(new UsuarioEntity(name, surname, lastname, email, username,
-                    "123", true));
+                            nombre.substring(0, 3) + apellidos.substring(1, 3) + i);
+            oUsuarioRepository.save(new UsuarioEntity(username, nombre, apellidos, usuarioPASSWORD, true));
         }
         return oUsuarioRepository.count();
     }
-*//*
+
     @Transactional
     public Long empty() {
-        oSessionService.onlyAdmins();
+        oSessionService.onlySupervisor();
         oUsuarioRepository.deleteAll();
         oUsuarioRepository.resetAutoIncrement();
-        UsuarioEntity oUsuarioEntity1 = new UsuarioEntity(1L, "Pedro", "Picapiedra", "Roca",
-                "pedropicapiedra@ausiasmarch.net", "pedropicapiedra", usuarioPASSWORD, false);
+        UsuarioEntity oUsuarioEntity1 = new UsuarioEntity(1L, "Picapiedra", "Pedro", "Roca", usuarioPASSWORD, false);
         oUsuarioRepository.save(oUsuarioEntity1);
-        oUsuarioEntity1 = new UsuarioEntity(2L, "Pablo", "Mármol", "Granito", "pablomarmol@ausiasmarch.net",
-                "pablomarmol", usuarioPASSWORD, true);
+        oUsuarioEntity1 = new UsuarioEntity(2L, "Granito", "Pablo", "Mármol", usuarioPASSWORD, true);
         oUsuarioRepository.save(oUsuarioEntity1);
         return oUsuarioRepository.count();
-    }
-*/
-    public Object populate(Integer amount) {
-        return null;
-    }
-
-    public Object empty() {
-        return null;
     }
 
 }
