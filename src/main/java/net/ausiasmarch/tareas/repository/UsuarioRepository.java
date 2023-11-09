@@ -8,9 +8,9 @@ import net.ausiasmarch.tareas.entity.UsuarioEntity;
 
 public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Long> {
 
-    Optional<UsuarioEntity> findByCodigo(String codigo);
+    Optional<UsuarioEntity> findByUsername(String username);
 
-    Optional<UsuarioEntity> findByCodigoAndPassword(Long codigo, String password);
+    Optional<UsuarioEntity> findByUsernameAndPassword(String username, String password);
 
     @Modifying
     @Query(value = "ALTER TABLE user AUTO_INCREMENT = 1", nativeQuery = true)

@@ -19,7 +19,7 @@ public class JWTHelper {
         return Keys.hmacShaKeyFor((SECRET + ISSUER + SECRET).getBytes());
     }
 
-    public static String generateJWT(Long codigo) {
+    public static String generateJWT(String username) {
 
         Date currentTime = Date.from(Instant.now());
         Date expiryTime = Date.from(Instant.now().plus(Duration.ofSeconds(1500)));
@@ -29,7 +29,7 @@ public class JWTHelper {
                 .setIssuer(ISSUER)
                 .setIssuedAt(currentTime)
                 .setExpiration(expiryTime)
-                .claim("nombre", codigo)
+                .claim("nombre", username)
                 .signWith(secretKey())
                 .compact();
     }

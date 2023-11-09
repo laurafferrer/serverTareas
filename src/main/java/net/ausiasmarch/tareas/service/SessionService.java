@@ -20,38 +20,38 @@ public class SessionService {
     HttpServletRequest oHttpServletRequest;
 
     public String login(UsuarioBean oUsuarioBean) {
-        oUsuarioRepository.findByCodigoAndPassword(oUsuarioBean.getCodigo(), oUsuarioBean.getPassword())
+        oUsuarioRepository.findByUsernameAndPassword(oUsuarioBean.getUsername(), oUsuarioBean.getPassword())
                 .orElseThrow(() -> new ResourceNotFoundException("Wrong Usuario or password"));
-        return JWTHelper.generateJWT(oUsuarioBean.getCodigo());
+        return JWTHelper.generateJWT(oUsuarioBean.getUsername());
     }
 
-    public String getSessionCodigo() {        
-        if (oHttpServletRequest.getAttribute("codigo") instanceof String) {
-            return oHttpServletRequest.getAttribute("codigo").toString();
+    public String getSessionUsername() {        
+        if (oHttpServletRequest.getAttribute("username") instanceof String) {
+            return oHttpServletRequest.getAttribute("username").toString();
         } else {
             return null;
         }
     }
 
     public UsuarioEntity getSessionUsuario() {
-        if (this.getSessionCodigo() != null) {
-            return oUsuarioRepository.findByCodigo(this.getSessionCodigo()).orElse(null);    
+        if (this.getSessionUsername() != null) {
+            return oUsuarioRepository.findByUsername(this.getSessionUsername()).orElse(null);    
         } else {
             return null;
         }
     }
 
     public Boolean isSessionActive() {
-        if (this.getSessionCodigo() != null) {
-            return oUsuarioRepository.findByCodigo(this.getSessionCodigo()).isPresent();
+        if (this.getSessionUsername() != null) {
+            return oUsuarioRepository.findByUsername(this.getSessionUsername()).isPresent();
         } else {
             return false;
         }
     }
 
     public Boolean isSupervisor() {
-        if (this.getSessionCodigo() != null) {
-            UsuarioEntity oUsuarioEntityInSession = oUsuarioRepository.findByCodigo(this.getSessionCodigo())
+        if (this.getSessionUsername() != null) {
+            UsuarioEntity oUsuarioEntityInSession = oUsuarioRepository.findByUsername(this.getSessionUsername())
                     .orElseThrow(() -> new ResourceNotFoundException("Usuario not found"));
             return Boolean.FALSE.equals(oUsuarioEntityInSession.getPuesto());
         } else {
@@ -60,8 +60,8 @@ public class SessionService {
     }
 
     public Boolean isUsuario() {
-        if (this.getSessionCodigo() != null) {
-            UsuarioEntity oUsuarioEntityInSession = oUsuarioRepository.findByCodigo(this.getSessionCodigo())
+        if (this.getSessionUsername() != null) {
+            UsuarioEntity oUsuarioEntityInSession = oUsuarioRepository.findByUsername(this.getSessionUsername())
                     .orElseThrow(() -> new ResourceNotFoundException("Usuario not found"));
             return Boolean.TRUE.equals(oUsuarioEntityInSession.getPuesto());
         } else {

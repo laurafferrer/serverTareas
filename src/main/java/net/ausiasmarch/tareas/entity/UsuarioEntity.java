@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,16 +23,16 @@ public class UsuarioEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(unique = true) // Hace que el campo "codigo" sea único
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull
-    private Long codigo;
     
     @NotNull
     @NotBlank
     @Size(min=3, max=255)
-    private String nombre;  
+    private String nombre;
+    @NotNull
+    @NotBlank
+    @Size(min=6, max=15)
+    @Pattern(regexp = "^[a-zA-Z0-9]+$", message = "Username must be alphanumeric")
+    private String username; 
     @Size(max=255)
     private String apellidos;
     private Boolean puesto = false;
@@ -42,7 +41,7 @@ public class UsuarioEntity {
     @NotBlank
     @Size(min=64, max=64)
     @Pattern(regexp = "^[a-fA-F0-9]+$", message = "Password must be hexadecimal")
-    private String password = "123";        
+    private String password = "e2cac5c5f7e52ab03441bb70e89726ddbd1f6e5b683dde05fb65e0720290179e";        
 
     @OneToMany(mappedBy = "usuario", fetch = jakarta.persistence.FetchType.LAZY)
     private List<TareaEntity> tareas;
@@ -51,26 +50,26 @@ public class UsuarioEntity {
         tareas = new ArrayList<>();
     }
 
-    public UsuarioEntity(Long id, Long codigo, String nombre, String apellidos, Boolean puesto,
+    public UsuarioEntity(Long id, String username, String nombre, String apellidos, Boolean puesto,
             String password) {
         this.id = id;
-        this.codigo = codigo;
+        this.username = username;
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.puesto = puesto;
         this.password = password;
     }
 
-    public UsuarioEntity(Long codigo, String nombre, String apellidos, Boolean puesto, String password) {
-        this.codigo = codigo;
+    public UsuarioEntity(String username, String nombre, String apellidos, Boolean puesto, String password) {
+        this.username = username;
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.password = password;
         this.puesto = puesto;
     }
 
-    public UsuarioEntity(Long codigo, String password) {
-        this.codigo = codigo;
+    public UsuarioEntity(String username, String password) {
+        this.username = username;
         this.password = password;
     }
 
@@ -82,12 +81,12 @@ public class UsuarioEntity {
         this.id = id;
     }
 
-    public Long getCodigo() {
-        return codigo;
+    public String getCodigo() {
+        return username;
     }
 
-    public void setCodigo(Long codigo) {
-        this.codigo = codigo;
+    public void setCodigo(String username) {
+        this.username = username;
     }
 
     public String getNombre() {
