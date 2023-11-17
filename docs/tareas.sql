@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: database:3306
--- Tiempo de generación: 08-11-2023 a las 18:07:53
+-- Tiempo de generación: 17-11-2023 a las 17:44:03
 -- Versión del servidor: 8.1.0
 -- Versión de PHP: 8.2.11
 
@@ -30,8 +30,8 @@ SET time_zone = "+00:00";
 CREATE TABLE `proyecto` (
   `id` bigint NOT NULL,
   `nombre` varchar(255) NOT NULL,
-  `fecha_inicio` date NOT NULL,
-  `fecha_fin` date DEFAULT NULL
+  `fecha_inicio` datetime NOT NULL,
+  `fecha_fin` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
