@@ -30,6 +30,11 @@ public class UsuarioApi {
         return ResponseEntity.ok(oUsuarioService.get(id));
     }
 
+    @GetMapping("/byUsername/{username}")
+    public ResponseEntity<UsuarioEntity> get(@PathVariable("username") String username) {
+        return ResponseEntity.ok(oUsuarioService.getByUsername(username));
+    }
+
     @PostMapping("")
     public ResponseEntity<Long> create(@RequestBody UsuarioEntity oUsuarioEntity) {
         return ResponseEntity.ok(oUsuarioService.create(oUsuarioEntity));
@@ -58,6 +63,11 @@ public class UsuarioApi {
     @DeleteMapping("/empty")
     public ResponseEntity<Object> empty() {
         return ResponseEntity.ok(oUsuarioService.empty());
+    }
+
+    @GetMapping("/byTareasNumberDesc")
+    public ResponseEntity<Page<UsuarioEntity>> getPageByTareasNumberDesc(Pageable oPageable) {
+        return ResponseEntity.ok(oUsuarioService.getPageByTareasNumberDesc(oPageable));
     }
 
 }

@@ -57,6 +57,9 @@ public class TareaService {
             oTareaEntity.setUsuario(oSessionService.getSessionUsuario());
             return oTareaRepository.save(oTareaEntity).getId();
         } else {
+            if (oTareaEntity.getUsuario().getId() == null || oTareaEntity.getUsuario.getId() == 0){
+                oTareaEntity.setUsuario(oSessionService.getSessionUsuario());
+            }
             return oTareaRepository.save(oTareaEntity).getId();
         }
     }
@@ -84,6 +87,7 @@ public class TareaService {
         for (int i = 0; i < amount; i++) {
             oTareaRepository.save(new TareaEntity(DataGenerationHelper.getSpeech(1),
                     DataGenerationHelper.getSpeech(ThreadLocalRandom.current().nextInt(5, 25)),
+                    DataGenerationHelper.getRandomDate();
                     oUsuarioService.getOneRandom(), oProyectoService.getOneRandom()));
         }
         return oTareaRepository.count();

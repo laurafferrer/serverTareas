@@ -29,28 +29,32 @@ public class ProyectoEntity {
     @OneToMany(mappedBy = "proyecto", fetch = jakarta.persistence.FetchType.LAZY)
     private List<TareaEntity> tareas;
 
-    @NotNull
-    private Date fecha_inicio;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z")
+    private LocalDateTime fecha_inicio;
     
-    @NotNull
-    private Date fecha_fin;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z")
+    private LocalDateTime fecha_fin;
 
     public ProyectoEntity() {
-        tareas = new java.util.ArrayList<>();
+    }
+
+    public ProyectoEntity(String nombre) {
+        this.nombre = nombre;
+        this.fecha_inicio = LocalDateTime.now();
+        this.fecha_fin = LocalDateTime.now().plus(Period.ofDays(7));
     }
 
     public ProyectoEntity(Long id, String nombre) {
         this.id = id;
         this.nombre = nombre;
-    }
-
-    public ProyectoEntity(String nombre) {
-        this.nombre = nombre;
+        this.fecha_inicio = LocalDateTime.now();
+        this.fecha_fin = LocalDateTime.now().plus(Period.ofDays(7));
     }
 
     public ProyectoEntity(String nombre, Date fecha_inicio, Date fecha_fin) {
         this.nombre = nombre;
         this.fecha_inicio = fecha_inicio;
+        this.fecha_fin = fecha_fin;
     }
 
     public ProyectoEntity(String speech, UsuarioEntity oneRandom) {

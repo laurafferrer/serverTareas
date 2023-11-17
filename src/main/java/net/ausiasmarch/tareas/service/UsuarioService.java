@@ -30,6 +30,10 @@ public class UsuarioService {
         return oUsuarioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Usuario not found"));
     }
 
+    public UsuarioEntity getByUsername(String username){
+        return oUsuarioRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException(Usuario not found by username));
+    }
+
     public Page<UsuarioEntity> getPage(Pageable oPageable) {
         oSessionService.onlyAdmins();
         return oUsuarioRepository.findAll(oPageable);
