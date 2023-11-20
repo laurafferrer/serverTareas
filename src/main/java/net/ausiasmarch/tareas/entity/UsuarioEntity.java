@@ -28,29 +28,29 @@ public class UsuarioEntity {
     @NotBlank
     @Size(min=3, max=255)
     private String nombre;
+    @Size(max=255)
+    private String apellidos;
     @NotNull
     @NotBlank
     @Size(min=6, max=15)
     @Pattern(regexp = "^[a-zA-Z0-9]+$", message = "Username must be alphanumeric")
-    private String username; 
-    @Size(max=255)
-    private String apellidos;
-    private Boolean puesto = false;
+    private String username;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotNull
     @NotBlank
     @Size(min=64, max=64)
     @Pattern(regexp = "^[a-fA-F0-9]+$", message = "Password must be hexadecimal")
     private String password = "e2cac5c5f7e52ab03441bb70e89726ddbd1f6e5b683dde05fb65e0720290179e";        
+    private Boolean puesto = false;
+
+    @OneToMany(mappedBy = "usuario", fetch = jakarta.persistence.FetchType.LAZY)
+    private List<ProyectoEntity> proyectos;
 
     @OneToMany(mappedBy = "usuario", fetch = jakarta.persistence.FetchType.LAZY)
     private List<TareaEntity> tareas;
 
     public UsuarioEntity() {
-        
-    }
-
-    public UsuarioEntity(String username2, String nombre2, String apellidos2, String string, boolean b) {
+        proyectos = new ArrayList<>();
         tareas = new ArrayList<>();
     }
 
@@ -84,20 +84,36 @@ public class UsuarioEntity {
         this.id = id;
     }
 
-    public String getCodigo() {
-        return username;
-    }
-
-    public void setCodigo(String username) {
-        this.username = username;
-    }
-
     public String getNombre() {
         return nombre;
     }
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    private String getApellidos() {
+        return apellidos;
+    }
+
+    public void setApellidos(String apellidos) {
+        this.apellidos = apellidos;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Boolean getPuesto() {
@@ -108,12 +124,8 @@ public class UsuarioEntity {
         this.puesto = puesto;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public int getProyectos() {
+        return proyectos.size();
     }
 
     public int getTareas() {

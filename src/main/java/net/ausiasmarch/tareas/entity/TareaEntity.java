@@ -1,5 +1,7 @@
 package net.ausiasmarch.tareas.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -48,9 +50,6 @@ public class TareaEntity {
         this.nombre = nombre;
         this.usuario = usuario;
         this.proyecto = proyecto;
-    }
-
-    public TareaEntity(String speech, String speech2, UsuarioEntity oneRandom, ProyectoEntity oneRandom2) {
     }
 
     public Long getId() {

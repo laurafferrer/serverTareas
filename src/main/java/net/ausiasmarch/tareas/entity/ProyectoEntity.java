@@ -26,23 +26,11 @@ public class ProyectoEntity {
     @Size(max = 2048)
     private String nombre;
 
-    @OneToMany(mappedBy = "proyecto", fetch = jakarta.persistence.FetchType.LAZY)
-    private List<TareaEntity> tareas;
-
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z")
     private LocalDateTime fecha_inicio;
     
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z")
     private LocalDateTime fecha_fin;
-
-    public ProyectoEntity() {
-    }
-
-    public ProyectoEntity(String nombre) {
-        this.nombre = nombre;
-        this.fecha_inicio = LocalDateTime.now();
-        this.fecha_fin = LocalDateTime.now().plus(Period.ofDays(7));
-    }
 
     public ProyectoEntity(Long id, String nombre) {
         this.id = id;
@@ -53,11 +41,8 @@ public class ProyectoEntity {
 
     public ProyectoEntity(String nombre, Date fecha_inicio, Date fecha_fin) {
         this.nombre = nombre;
-        this.fecha_inicio = fecha_inicio;
-        this.fecha_fin = fecha_fin;
-    }
-
-    public ProyectoEntity(String speech, UsuarioEntity oneRandom) {
+        this.fecha_inicio = LocalDateTime.now();
+        this.fecha_fin = LocalDateTime.now().plus(Period.ofDays(7));
     }
 
     public Long getId() {
@@ -90,17 +75,6 @@ public class ProyectoEntity {
 
     public void setFecha_fin(Date fecha_fin) {
         this.fecha_fin = fecha_fin;
-    }
-
-    public int getTareas() {
-        return tareas.size();
-    }
-
-    public void setUsuario(UsuarioEntity sessionUsuario) {
-    }
-
-    public ProyectoEntity getUsuario() {
-        return null;
     }
 
 }
