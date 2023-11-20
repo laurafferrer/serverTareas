@@ -1,12 +1,18 @@
 package net.ausiasmarch.tareas.entity;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
@@ -26,11 +32,20 @@ public class ProyectoEntity {
     @Size(max = 2048)
     private String nombre;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z")
-    private LocalDateTime fecha_inicio;
+    @OneToMany(mappedBy = "proyecto", fetch = jakarta.persistence.FetchType.LAZY)
+    private List<TareaEntity> tareas;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+private LocalDateTime fecha_inicio;
+
+@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+private LocalDateTime fecha_fin;
+
+    private String speech;
     
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z")
-    private LocalDateTime fecha_fin;
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private UsuarioEntity usuario;
 
     public ProyectoEntity(Long id, String nombre) {
         this.id = id;
@@ -43,6 +58,11 @@ public class ProyectoEntity {
         this.nombre = nombre;
         this.fecha_inicio = LocalDateTime.now();
         this.fecha_fin = LocalDateTime.now().plus(Period.ofDays(7));
+    }
+
+    public ProyectoEntity(String speech, UsuarioEntity oneRandom) {
+        this.speech = speech;
+    this.usuario = oneRandom;
     }
 
     public Long getId() {
@@ -59,22 +79,6 @@ public class ProyectoEntity {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    public Date getFecha_inicio() {
-        return fecha_inicio;
-    }
-
-    public void setFecha_inicio(Date fecha_inicio) {
-        this.fecha_inicio = fecha_inicio;
-    }
-
-    public Date getFecha_fin() {
-        return fecha_fin;
-    }
-
-    public void setFecha_fin(Date fecha_fin) {
-        this.fecha_fin = fecha_fin;
     }
 
 }

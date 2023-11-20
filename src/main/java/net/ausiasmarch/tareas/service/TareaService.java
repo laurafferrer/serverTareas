@@ -57,7 +57,7 @@ public class TareaService {
             oTareaEntity.setUsuario(oSessionService.getSessionUsuario());
             return oTareaRepository.save(oTareaEntity).getId();
         } else {
-            if (oTareaEntity.getUsuario().getId() == null || oTareaEntity.getUsuario.getId() == 0){
+            if (oTareaEntity.getUsuario().getId() == null || oTareaEntity.getUsuario().getId() == 0){
                 oTareaEntity.setUsuario(oSessionService.getSessionUsuario());
             }
             return oTareaRepository.save(oTareaEntity).getId();
@@ -85,10 +85,9 @@ public class TareaService {
     public Long populate(Integer amount) {
         oSessionService.onlyAdmins();
         for (int i = 0; i < amount; i++) {
-            oTareaRepository.save(new TareaEntity(DataGenerationHelper.getSpeech(1),
-                    DataGenerationHelper.getSpeech(ThreadLocalRandom.current().nextInt(5, 25)),
-                    DataGenerationHelper.getRandomDate();
-                    oUsuarioService.getOneRandom(), oProyectoService.getOneRandom()));
+            TareaEntity tareaEntity = new TareaEntity(DataGenerationHelper.getRadomNombre(),
+                    oUsuarioService.getOneRandom(), oProyectoService.getOneRandom());
+            oTareaRepository.save(tareaEntity);
         }
         return oTareaRepository.count();
     }

@@ -46,8 +46,8 @@ public class ProyectoApi {
     }
 
     @GetMapping("")
-    public ResponseEntity<Long> getPage(Pageable oPageable) {
-        return ResponseEntity.ok(oProyectoService.getPage(oPageable));
+    public ResponseEntity<Page<ProyectoEntity>> getPage(Pageable oPageable) {
+        return ResponseEntity.ok(oProyectoService.getPage(oPageable, null));
     }
 
     @PostMapping("/populate/{amount}")

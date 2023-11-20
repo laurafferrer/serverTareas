@@ -92,7 +92,7 @@ public class UsuarioEntity {
         this.nombre = nombre;
     }
 
-    private String getApellidos() {
+    public String getApellidos() {
         return apellidos;
     }
 
@@ -124,12 +124,13 @@ public class UsuarioEntity {
         this.puesto = puesto;
     }
 
-    public int getProyectos() {
-        return proyectos.size();
+    public List<ProyectoEntity> getProyectos() {
+        return proyectos;
     }
-
-    public int getTareas() {
-        return tareas.size();
+    
+    public List<TareaEntity> getTareas() {
+        return tareas;
     }
+    
 
 }

@@ -1,6 +1,6 @@
 package net.ausiasmarch.tareas.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -37,19 +37,23 @@ public class TareaEntity {
     public TareaEntity() {
     }
 
-    public TareaEntity(String nombre) {
-        this.nombre = nombre;
-    }
-
     public TareaEntity(Long id, String nombre) {
         this.id = id;
         this.nombre = nombre;
     }
 
+    // Constructor para la relación @ManyToOne
+    public TareaEntity(String nombre, ProyectoEntity proyectoEntity, UsuarioEntity usuarioEntity) {
+        this.nombre = nombre;
+        this.proyecto = proyectoEntity;
+        this.usuario = usuarioEntity;
+    }
+
+    // Constructor para la relación @ManyToOne
     public TareaEntity(String nombre, UsuarioEntity usuario, ProyectoEntity proyecto) {
         this.nombre = nombre;
-        this.usuario = usuario;
         this.proyecto = proyecto;
+        this.usuario = usuario;
     }
 
     public Long getId() {

@@ -42,19 +42,10 @@ public class ProyectoService {
         }
     }
 
-    public Page<ProyectoEntity> getPageByTareasNumberDesc(Pageable oPageable) {
-        if (usuarioId == 0) {
-            return oProyectoRepository.findProyectosByTareasNumberDesc(oPageable);
-        } else {
-            return oProyectoRepository.findProyectosByTareasNumberDescFilterByUsuarioId(usuarioId, oPageable);
-        }
-        }
-
     public Long create(ProyectoEntity oProyectoEntity) {
         oProyectoEntity.setId(null);
         oSessionService.onlyAdminsOrUsuarios();
         if (oSessionService.isUsuario()) {
-            oProyectoEntity.setUsuario(oSessionService.getSessionUsuario());
             return oProyectoRepository.save(oProyectoEntity).getId();
         } else {
             return oProyectoRepository.save(oProyectoEntity).getId();
@@ -63,9 +54,9 @@ public class ProyectoService {
 
     public ProyectoEntity update(ProyectoEntity oProyectoEntityToSet) {
         ProyectoEntity oProyectoEntityFromDatabase = this.get(oProyectoEntityToSet.getId());
-        oSessionService.onlyAdminsOrUsuariosWithIisOwnData(oProyectoEntityFromDatabase.getUsuario().getId());
+        oSessionService.onlyAdminsOrUsuariosWithIisOwnData(oProyectoEntityFromDatabase.getId());
         if (oSessionService.isUsuario()) {
-            if (oProyectoEntityToSet.getUsuario().getId().equals(oSessionService.getSessionUsuario().getId())) {
+            if (oProyectoEntityToSet.getId().equals(oSessionService.getSessionUsuario().getId())) {
                 return oProyectoRepository.save(oProyectoEntityToSet);
             } else {
                 throw new ResourceNotFoundException("Unauthorized");
@@ -77,7 +68,7 @@ public class ProyectoService {
 
     public Long delete(Long id) {
         ProyectoEntity oProyectoEntityFromDatabase = this.get(id);
-        oSessionService.onlyAdminsOrUsuariosWithIisOwnData(oProyectoEntityFromDatabase.getUsuario().getId());
+        oSessionService.onlyAdminsOrUsuariosWithIisOwnData(oProyectoEntityFromDatabase.getId());
         oProyectoRepository.deleteById(id);
         return id;
     }

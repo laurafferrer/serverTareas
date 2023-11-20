@@ -49,7 +49,7 @@ public class SessionService {
         }
     }
 
-    public Boolean isSupervisor() {
+    public Boolean isAdmin() {
         if (this.getSessionUsername() != null) {
             UsuarioEntity oUsuarioEntityInSession = oUsuarioRepository.findByUsername(this.getSessionUsername())
                     .orElseThrow(() -> new ResourceNotFoundException("Usuario not found"));
@@ -69,8 +69,8 @@ public class SessionService {
         }
     }
 
-    public void onlySupervisor() {
-        if (!this.isSupervisor()) {
+    public void onlyAdmins() {
+        if (!this.isAdmin()) {
             throw new UnauthorizedException("Only supervisor can do this");
         }
     }
@@ -81,7 +81,7 @@ public class SessionService {
         }
     }
 
-    public void onlySupervisoresOrUsuarios() {
+    public void onlyAdminsOrUsuarios() {
         if (!this.isSessionActive()) {
             throw new UnauthorizedException("Only supervisores or usuarios can do this");
         }
@@ -96,9 +96,9 @@ public class SessionService {
         }
     }
 
-    public void onlySupervisoresOrUsuariosWithIisOwnData(Long usuario_id) {
+    public void onlyAdminsOrUsuariosWithIisOwnData(Long usuario_id) {
         if (this.isSessionActive()) {
-            if (!this.isSupervisor()) {
+            if (!this.isAdmin()) {
                 if (!this.isUsuario()) {
                     throw new UnauthorizedException("Only supervisores or usuarios can do this");
                 } else {
@@ -110,9 +110,6 @@ public class SessionService {
         } else {
             throw new UnauthorizedException("Only supervisores or usuarios can do this");
         }
-    }
-
-    public void onlyAdmins() {
     }
 
 }

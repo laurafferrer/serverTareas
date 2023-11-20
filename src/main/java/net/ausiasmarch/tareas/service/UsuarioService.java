@@ -40,7 +40,7 @@ public class UsuarioService {
     }
 
     public Page<UsuarioEntity> getPageByTareasNumberDesc(Pageable oPageable) {
-        return oUsuarioEntity.findByTareasNumberDescFilter(oPageable);
+        return oUsuarioRepository.findByTareasNumberDescFilter(oPageable);
     }
 
     public Long create(UsuarioEntity oUsuarioEntity) {
@@ -78,8 +78,8 @@ public class UsuarioService {
     public Long populate(Integer amount) {
         oSessionService.onlyAdmins();
         for (int i = 0; i < amount; i++) {
-            String nombre = DataGenerationHelper.getRadomName();
-            String apellidos = DataGenerationHelper.getRadomSurname();
+            String nombre = DataGenerationHelper.getRadomNombre();
+            String apellidos = DataGenerationHelper.getRadomApellido();
             String username = DataGenerationHelper
                     .doNormalizeString(
                             nombre.substring(0, 3) + apellidos.substring(1, 3) + i);
