@@ -51,7 +51,7 @@ public class TareaService {
     }
 
     public Long create(TareaEntity oTareaEntity) {
-        oSessionService.onlySupervisoresOrUsuarios();
+        oSessionService.onlyAdminsOrUsuarios();
         oTareaEntity.setId(null);        
         if (oSessionService.isUsuario()) {
             oTareaEntity.setUsuario(oSessionService.getSessionUsuario());
@@ -66,7 +66,7 @@ public class TareaService {
 
     public TareaEntity update(TareaEntity oTareaEntityToSet) {
         TareaEntity oTareaEntityFromDatabase = this.get(oTareaEntityToSet.getId());
-        oSessionService.onlySupervisoresOrUsuariosWithIisOwnData(oTareaEntityFromDatabase.getUsuario().getId());
+        oSessionService.onlyAdminsOrUsuariosWithIisOwnData(oTareaEntityFromDatabase.getUsuario().getId());
         if (oSessionService.isUsuario()) {
             oTareaEntityToSet.setUsuario(oSessionService.getSessionUsuario());
             return oTareaRepository.save(oTareaEntityToSet);
@@ -77,7 +77,7 @@ public class TareaService {
 
     public Long delete(Long id) {
         TareaEntity oTareaEntityFromDatabase = this.get(id);
-        oSessionService.onlySupervisoresOrUsuariosWithIisOwnData(oTareaEntityFromDatabase.getUsuario().getId());
+        oSessionService.onlyAdminsOrUsuariosWithIisOwnData(oTareaEntityFromDatabase.getUsuario().getId());
         oTareaRepository.deleteById(id);
         return id;
     }
@@ -95,7 +95,7 @@ public class TareaService {
 
     @Transactional
     public Long empty() {
-        oSessionService.onlySupervisor();
+        oSessionService.onlyAdmins();
         oTareaRepository.deleteAll();
         oTareaRepository.resetAutoIncrement();
         oTareaRepository.flush();

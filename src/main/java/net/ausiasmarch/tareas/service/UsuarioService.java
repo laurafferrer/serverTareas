@@ -31,12 +31,16 @@ public class UsuarioService {
     }
 
     public UsuarioEntity getByUsername(String username){
-        return oUsuarioRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException(Usuario not found by username));
+        return oUsuarioRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException("Usuario not found by username"));
     }
 
     public Page<UsuarioEntity> getPage(Pageable oPageable) {
         oSessionService.onlyAdmins();
         return oUsuarioRepository.findAll(oPageable);
+    }
+
+    public Page<UsuarioEntity> getPageByTareasNumberDesc(Pageable oPageable) {
+        return oUsuarioEntity.findByTareasNumberDescFilter(oPageable);
     }
 
     public Long create(UsuarioEntity oUsuarioEntity) {
@@ -48,27 +52,25 @@ public class UsuarioService {
 
     public UsuarioEntity update(UsuarioEntity oUsuarioEntityToSet) {
         UsuarioEntity oUsuarioEntityFromDatabase = this.get(oUsuarioEntityToSet.getId());
-        oSessionService.onlySupervisoresOrUsuariosWithIisOwnData(oUsuarioEntityFromDatabase.getId());
+        oSessionService.onlyAdminsOrUsuariosWithIisOwnData(oUsuarioEntityFromDatabase.getId());
         if (oSessionService.isUsuario()) {
-            oUsuarioEntityToSet.setId(null);
             oUsuarioEntityToSet.setPuesto(oUsuarioEntityFromDatabase.getPuesto());
             oUsuarioEntityToSet.setPassword(usuarioPASSWORD);
             return oUsuarioRepository.save(oUsuarioEntityToSet);
         } else {
-            oUsuarioEntityToSet.setId(null);
             oUsuarioEntityToSet.setPassword(usuarioPASSWORD);
             return oUsuarioRepository.save(oUsuarioEntityToSet);
         }
     }
 
     public Long delete(Long id) {
-        oSessionService.onlySupervisor();
+        oSessionService.onlyAdmins();
         oUsuarioRepository.deleteById(id);
         return id;
     }
 
     public UsuarioEntity getOneRandom() {
-        oSessionService.onlySupervisor();
+        oSessionService.onlyAdmins();
         Pageable oPageable = PageRequest.of((int) (Math.random() * oUsuarioRepository.count()), 1);
         return oUsuarioRepository.findAll(oPageable).getContent().get(0);
     }
@@ -88,7 +90,7 @@ public class UsuarioService {
 
     @Transactional
     public Long empty() {
-        oSessionService.onlySupervisor();
+        oSessionService.onlyAdmins();
         oUsuarioRepository.deleteAll();
         oUsuarioRepository.resetAutoIncrement();
         UsuarioEntity oUsuarioEntity1 = new UsuarioEntity(1L, "Picapiedra", "Pedro", "Roca", usuarioPASSWORD, false);

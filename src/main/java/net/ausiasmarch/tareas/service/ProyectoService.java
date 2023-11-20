@@ -42,9 +42,17 @@ public class ProyectoService {
         }
     }
 
+    public Page<ProyectoEntity> getPageByTareasNumberDesc(Pageable oPageable) {
+        if (usuarioId == 0) {
+            return oProyectoRepository.findProyectosByTareasNumberDesc(oPageable);
+        } else {
+            return oProyectoRepository.findProyectosByTareasNumberDescFilterByUsuarioId(usuarioId, oPageable);
+        }
+        }
+
     public Long create(ProyectoEntity oProyectoEntity) {
         oProyectoEntity.setId(null);
-        oSessionService.onlySupervisoresOrUsuarios();
+        oSessionService.onlyAdminsOrUsuarios();
         if (oSessionService.isUsuario()) {
             oProyectoEntity.setUsuario(oSessionService.getSessionUsuario());
             return oProyectoRepository.save(oProyectoEntity).getId();
@@ -55,7 +63,7 @@ public class ProyectoService {
 
     public ProyectoEntity update(ProyectoEntity oProyectoEntityToSet) {
         ProyectoEntity oProyectoEntityFromDatabase = this.get(oProyectoEntityToSet.getId());
-        oSessionService.onlySupervisoresOrUsuariosWithIisOwnData(oProyectoEntityFromDatabase.getUsuario().getId());
+        oSessionService.onlyAdminsOrUsuariosWithIisOwnData(oProyectoEntityFromDatabase.getUsuario().getId());
         if (oSessionService.isUsuario()) {
             if (oProyectoEntityToSet.getUsuario().getId().equals(oSessionService.getSessionUsuario().getId())) {
                 return oProyectoRepository.save(oProyectoEntityToSet);
@@ -69,7 +77,7 @@ public class ProyectoService {
 
     public Long delete(Long id) {
         ProyectoEntity oProyectoEntityFromDatabase = this.get(id);
-        oSessionService.onlySupervisoresOrUsuariosWithIisOwnData(oProyectoEntityFromDatabase.getUsuario().getId());
+        oSessionService.onlyAdminsOrUsuariosWithIisOwnData(oProyectoEntityFromDatabase.getUsuario().getId());
         oProyectoRepository.deleteById(id);
         return id;
     }
@@ -84,21 +92,17 @@ public class ProyectoService {
     }
 
     public ProyectoEntity getOneRandom() {
-        oSessionService.onlySupervisor();
+        oSessionService.onlyAdmins();
         Pageable oPageable = PageRequest.of((int) (Math.random() * oProyectoRepository.count()), 1);
         return oProyectoRepository.findAll(oPageable).getContent().get(0);
     }
 
     @Transactional
     public Long empty() {
-        oSessionService.onlySupervisor();
+        oSessionService.onlyAdmins();
         oProyectoRepository.deleteAll();
         oProyectoRepository.resetAutoIncrement();
         oProyectoRepository.flush();
         return oProyectoRepository.count();
-    }
-
-    public Object getPage(Pageable oPageable) {
-        return null;
     }
 }
