@@ -35,9 +35,9 @@ public class JWTFilter implements Filter {
 
             if (auth != null && auth.startsWith("Bearer ")) {
                 String token = auth.substring(7);
-                String nombre = JWTHelper.validateJWT(token);
-                if (nombre != null) {
-                    request.setAttribute("nombre", nombre);
+                String username = JWTHelper.validateJWT(token);
+                if (username != null) {
+                    request.setAttribute("username", username);
                 }
             }
         }
