@@ -53,7 +53,7 @@ public class TareaApi {
     }
 
     @PostMapping("/populate/{amount}")
-    public ResponseEntity<Object> populate(@PathVariable("amount") Integer amount) {
+    public ResponseEntity<Long> populate(@PathVariable("amount") Integer amount) {
         return ResponseEntity.ok(oTareaService.populate(amount));
     }
 
