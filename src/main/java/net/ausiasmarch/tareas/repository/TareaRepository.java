@@ -8,11 +8,11 @@ import org.springframework.data.jpa.repository.Query;
 import net.ausiasmarch.tareas.entity.TareaEntity;
 
 public interface TareaRepository extends JpaRepository<TareaEntity, Long> {
-    Page<TareaEntity> findByUsuarioId(Long UsuarioId, Pageable pageable);
+    Page<TareaEntity> findByUsuarioId(Long id, Pageable pageable);
+
+    Page<TareaEntity> findByProyectoId(Long id, Pageable oPageable);
 
     @Modifying
     @Query(value = "ALTER TABLE tarea AUTO_INCREMENT = 1", nativeQuery = true)
     void resetAutoIncrement();
-
-    Page<TareaEntity> findByProyectoId(Long proyectoId, Pageable oPageable);
 }
