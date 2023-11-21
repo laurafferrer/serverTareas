@@ -15,8 +15,8 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Long> {
 
     Optional<UsuarioEntity> findByUsernameAndPassword(String username, String password);
 
-    @Query(value = "SELECT u.*, count(r.id) FROM usuario u, tarea t WHERE u.id = t.usuario_id GROUP BY u.id ORDER BY(u.id) desc", nativeQuery = true)
-    Page<UsuarioEntity> findByTareasNumberDescFilter(Pageable pageable);
+    @Query(value = "SELECT u.*,count(t.id) FROM usuario u, tarea t WHERE u.id = t.usuario_id GROUP BY u.id ORDER BY COUNT(u.id) desc", nativeQuery = true)
+    Page<UsuarioEntity> findUsuariosByTareasNumberDescFilter(Pageable pageable);
 
     @Modifying
     @Query(value = "ALTER TABLE user AUTO_INCREMENT = 1", nativeQuery = true)

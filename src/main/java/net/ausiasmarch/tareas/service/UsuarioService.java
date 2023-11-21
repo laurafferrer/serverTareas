@@ -79,11 +79,11 @@ public class UsuarioService {
     public Long populate(Integer amount) {
         oSessionService.onlyAdmins();
         for (int i = 0; i < amount; i++) {
-            String nombre = DataGenerationHelper.getRadomNombre();
-            String apellidos = DataGenerationHelper.getRadomApellido();
+            String nombre = DataGenerationHelper.getRandomNombre();
+            String apellidos = DataGenerationHelper.getRandomApellido();
             String username = DataGenerationHelper
                     .doNormalizeString(
-                            nombre.substring(0, 3) + apellidos.substring(1, 3);
+                            nombre.substring(0, 3) + apellidos.substring(1, 3));
             oUsuarioRepository.save(new UsuarioEntity(nombre, apellidos, username, usuarioPASSWORD , true));
         }
         return oUsuarioRepository.count();

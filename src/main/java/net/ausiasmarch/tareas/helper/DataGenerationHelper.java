@@ -17,11 +17,11 @@ public class DataGenerationHelper {
         return randomNum;
     }
 
-    public static String getRadomNombre() {
+    public static String getRandomNombre() {
         return aNombre[(int) (Math.random() * aNombre.length)];
     }
 
-    public static String getRadomApellido() {
+    public static String getRandomApellido() {
         return aApellido[(int) (Math.random() * aApellido.length)];
     }
 
