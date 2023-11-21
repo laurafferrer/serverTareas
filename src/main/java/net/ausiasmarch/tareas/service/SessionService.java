@@ -21,7 +21,7 @@ public class SessionService {
 
     public String login(UsuarioBean oUsuarioBean) {
         oUsuarioRepository.findByUsernameAndPassword(oUsuarioBean.getUsername(), oUsuarioBean.getPassword())
-                .orElseThrow(() -> new ResourceNotFoundException("Wrong Usuario or password"));
+                .orElseThrow(() -> new ResourceNotFoundException("Wrong User or password"));
         return JWTHelper.generateJWT(oUsuarioBean.getUsername());
     }
 
@@ -52,7 +52,7 @@ public class SessionService {
     public Boolean isAdmin() {
         if (this.getSessionUsername() != null) {
             UsuarioEntity oUsuarioEntityInSession = oUsuarioRepository.findByUsername(this.getSessionUsername())
-                    .orElseThrow(() -> new ResourceNotFoundException("Usuario not found"));
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found"));
             return Boolean.FALSE.equals(oUsuarioEntityInSession.getPuesto());
         } else {
             return false;
@@ -62,7 +62,7 @@ public class SessionService {
     public Boolean isUsuario() {
         if (this.getSessionUsername() != null) {
             UsuarioEntity oUsuarioEntityInSession = oUsuarioRepository.findByUsername(this.getSessionUsername())
-                    .orElseThrow(() -> new ResourceNotFoundException("Usuario not found"));
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found"));
             return Boolean.TRUE.equals(oUsuarioEntityInSession.getPuesto());
         } else {
             return false;
@@ -71,28 +71,28 @@ public class SessionService {
 
     public void onlyAdmins() {
         if (!this.isAdmin()) {
-            throw new UnauthorizedException("Only supervisor can do this");
+            throw new UnauthorizedException("Only admins can do this");
         }
     }
 
     public void onlyUsuarios() {
         if (!this.isUsuario()) {
-            throw new UnauthorizedException("Only Usuarios can do this");
+            throw new UnauthorizedException("Only users can do this");
         }
     }
 
     public void onlyAdminsOrUsuarios() {
         if (!this.isSessionActive()) {
-            throw new UnauthorizedException("Only supervisores or usuarios can do this");
+            throw new UnauthorizedException("Only admins or users can do this");
         }
     }
 
     public void onlyUsuariosWithIisOwnData(Long usuario_id) {
         if (!this.isUsuario()) {
-            throw new UnauthorizedException("Only usuarios can do this");
+            throw new UnauthorizedException("Only users can do this");
         }
         if (!this.getSessionUsuario().getId().equals(usuario_id)) {
-            throw new UnauthorizedException("Only Usuarios can do this");
+            throw new UnauthorizedException("Only users can do this");
         }
     }
 
@@ -100,15 +100,15 @@ public class SessionService {
         if (this.isSessionActive()) {
             if (!this.isAdmin()) {
                 if (!this.isUsuario()) {
-                    throw new UnauthorizedException("Only supervisores or usuarios can do this");
+                    throw new UnauthorizedException("Only admins or users can do this");
                 } else {
                     if (!this.getSessionUsuario().getId().equals(usuario_id)) {
-                        throw new UnauthorizedException("Only supervisores or usuarios with its own data can do this");
+                        throw new UnauthorizedException("Only admins or users with its own data can do this");
                     }
                 }
             }
         } else {
-            throw new UnauthorizedException("Only supervisores or usuarios can do this");
+            throw new UnauthorizedException("Only admins or users can do this");
         }
     }
 

@@ -32,30 +32,30 @@ public class TareaService {
     @Autowired
     SessionService oSessionService;
 
-    public TareaEntity get(Long id) {
+   public TareaEntity get(Long id) {
         return oTareaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Tarea not found"));
     }
 
-    public Page<TareaEntity> getPage(Pageable oPageable, Long usuarioId, Long proyectoId) {
-        if (usuarioId == 0) {
-            if (proyectoId == 0) {
+    public Page<TareaEntity> getPage(Pageable oPageable, Long usuario_id, Long proyecto_id) {
+        if (usuario_id == 0) {
+            if (proyecto_id == 0) {
                 return oTareaRepository.findAll(oPageable);
             } else {
-                return oTareaRepository.findByProyectoId(proyectoId, oPageable);
+                return oTareaRepository.findByProyectoId(proyecto_id, oPageable);
             }
         } else {
-            return oTareaRepository.findByUsuarioId(usuarioId, oPageable);
+            return oTareaRepository.findByUsuarioId(usuario_id, oPageable);
         }
     }
 
     public Long create(TareaEntity oTareaEntity) {
         oSessionService.onlyAdminsOrUsuarios();
-        oTareaEntity.setId(null);        
+        oTareaEntity.setId(null);
         if (oSessionService.isUsuario()) {
             oTareaEntity.setUsuario(oSessionService.getSessionUsuario());
             return oTareaRepository.save(oTareaEntity).getId();
         } else {
-            if (oTareaEntity.getUsuario().getId() == null || oTareaEntity.getUsuario().getId() == 0){
+            if (oTareaEntity.getUsuario().getId() == null || oTareaEntity.getUsuario().getId() == 0) {
                 oTareaEntity.setUsuario(oSessionService.getSessionUsuario());
             }
             return oTareaRepository.save(oTareaEntity).getId();
@@ -83,9 +83,8 @@ public class TareaService {
     public Long populate(Integer amount) {
         oSessionService.onlyAdmins();
         for (int i = 0; i < amount; i++) {
-            TareaEntity tareaEntity = new TareaEntity(DataGenerationHelper.getRadomNombre(),
-                    oUsuarioService.getOneRandom(), oProyectoService.getOneRandom());
-            oTareaRepository.save(tareaEntity);
+            oTareaRepository.save(new TareaEntity(DataGenerationHelper.getSpeech(1),
+                    oUsuarioService.getOneRandom(), oProyectoService.getOneRandom()));
         }
         return oTareaRepository.count();
     }

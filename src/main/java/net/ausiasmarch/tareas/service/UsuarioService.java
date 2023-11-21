@@ -17,7 +17,7 @@ public class UsuarioService {
 
     private final String usuarioPASSWORD = "e2cac5c5f7e52ab03441bb70e89726ddbd1f6e5b683dde05fb65e0720290179e";
 
-    @Autowired
+     @Autowired
     UsuarioRepository oUsuarioRepository;
 
     @Autowired
@@ -27,11 +27,12 @@ public class UsuarioService {
     SessionService oSessionService;
 
     public UsuarioEntity get(Long id) {
-        return oUsuarioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Usuario not found"));
+        return oUsuarioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
-    public UsuarioEntity getByUsername(String username){
-        return oUsuarioRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException("Usuario not found by username"));
+    public UsuarioEntity getByUsername(String username) {
+        return oUsuarioRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found by username"));
     }
 
     public Page<UsuarioEntity> getPage(Pageable oPageable) {
@@ -40,7 +41,7 @@ public class UsuarioService {
     }
 
     public Page<UsuarioEntity> getPageByTareasNumberDesc(Pageable oPageable) {
-        return oUsuarioRepository.findByTareasNumberDescFilter(oPageable);
+        return oUsuarioRepository.findUsuariosByTareasNumberDescFilter(oPageable);
     }
 
     public Long create(UsuarioEntity oUsuarioEntity) {
@@ -53,11 +54,11 @@ public class UsuarioService {
     public UsuarioEntity update(UsuarioEntity oUsuarioEntityToSet) {
         UsuarioEntity oUsuarioEntityFromDatabase = this.get(oUsuarioEntityToSet.getId());
         oSessionService.onlyAdminsOrUsuariosWithIisOwnData(oUsuarioEntityFromDatabase.getId());
-        if (oSessionService.isUsuario()) {
+        if (oSessionService.isUsuario()) {            
             oUsuarioEntityToSet.setPuesto(oUsuarioEntityFromDatabase.getPuesto());
             oUsuarioEntityToSet.setPassword(usuarioPASSWORD);
             return oUsuarioRepository.save(oUsuarioEntityToSet);
-        } else {
+        } else {            
             oUsuarioEntityToSet.setPassword(usuarioPASSWORD);
             return oUsuarioRepository.save(oUsuarioEntityToSet);
         }
@@ -82,8 +83,8 @@ public class UsuarioService {
             String apellidos = DataGenerationHelper.getRadomApellido();
             String username = DataGenerationHelper
                     .doNormalizeString(
-                            nombre.substring(0, 3) + apellidos.substring(1, 3) + i);
-            oUsuarioRepository.save(new UsuarioEntity(username, nombre, apellidos, usuarioPASSWORD, true));
+                            nombre.substring(0, 3) + apellidos.substring(1, 3);
+            oUsuarioRepository.save(new UsuarioEntity(nombre, apellidos, username, usuarioPASSWORD , true));
         }
         return oUsuarioRepository.count();
     }
@@ -93,9 +94,9 @@ public class UsuarioService {
         oSessionService.onlyAdmins();
         oUsuarioRepository.deleteAll();
         oUsuarioRepository.resetAutoIncrement();
-        UsuarioEntity oUsuarioEntity1 = new UsuarioEntity(1L, "Picapiedra", "Pedro", "Roca", usuarioPASSWORD, false);
+        UsuarioEntity oUsuarioEntity1 = new UsuarioEntity(1L, "Pedro", "Picapiedra", "pedropicapiedra", usuarioPASSWORD, false);
         oUsuarioRepository.save(oUsuarioEntity1);
-        oUsuarioEntity1 = new UsuarioEntity(2L, "Granito", "Pablo", "Mármol", usuarioPASSWORD, true);
+        oUsuarioEntity1 = new UsuarioEntity(2L, "Pablo", "Mármol", "pablomarmol", usuarioPASSWORD, true);
         oUsuarioRepository.save(oUsuarioEntity1);
         return oUsuarioRepository.count();
     }

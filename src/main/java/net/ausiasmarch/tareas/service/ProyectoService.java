@@ -34,18 +34,28 @@ public class ProyectoService {
         return oProyectoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Proyecto not found"));
     }
 
-    public Page<ProyectoEntity> getPage(Pageable oPageable, Long usuarioId) {
-        if (usuarioId == 0) {
+    public Page<ProyectoEntity> getPage(Pageable oPageable, Long usuario_id) {
+        if (usuario_id == 0) {
             return oProyectoRepository.findAll(oPageable);
         } else {
-            return oProyectoRepository.findByUsuarioId(usuarioId, oPageable);
+            return oProyectoRepository.findByUsuarioId(usuario_id, oPageable);
         }
     }
+
+    public Page<ProyectoEntity> getPageByTareasNumberDesc(Pageable oPageable, Long usuario_id) {
+        if (usuario_id == 0) {
+            return oProyectoRepository.findProyectosByTareasNumberDesc(oPageable);
+        } else {
+            return oProyectoRepository.findProyectosByTareasNumberDescFilterByUsuarioId(usuario_id, oPageable);
+        }
+    }
+
 
     public Long create(ProyectoEntity oProyectoEntity) {
         oProyectoEntity.setId(null);
         oSessionService.onlyAdminsOrUsuarios();
         if (oSessionService.isUsuario()) {
+            oProyectoEntity.setUsuario(oSessionService.getSessionUsuario());
             return oProyectoRepository.save(oProyectoEntity).getId();
         } else {
             return oProyectoRepository.save(oProyectoEntity).getId();
@@ -54,9 +64,9 @@ public class ProyectoService {
 
     public ProyectoEntity update(ProyectoEntity oProyectoEntityToSet) {
         ProyectoEntity oProyectoEntityFromDatabase = this.get(oProyectoEntityToSet.getId());
-        oSessionService.onlyAdminsOrUsuariosWithIisOwnData(oProyectoEntityFromDatabase.getId());
+        oSessionService.onlyAdminsOrUsuariosWithIisOwnData(oProyectoEntityFromDatabase.getUsuario().getId());
         if (oSessionService.isUsuario()) {
-            if (oProyectoEntityToSet.getId().equals(oSessionService.getSessionUsuario().getId())) {
+            if (oProyectoEntityToSet.getUsuario().getId().equals(oSessionService.getSessionUsuario().getId())) {
                 return oProyectoRepository.save(oProyectoEntityToSet);
             } else {
                 throw new ResourceNotFoundException("Unauthorized");
@@ -68,7 +78,7 @@ public class ProyectoService {
 
     public Long delete(Long id) {
         ProyectoEntity oProyectoEntityFromDatabase = this.get(id);
-        oSessionService.onlyAdminsOrUsuariosWithIisOwnData(oProyectoEntityFromDatabase.getId());
+        oSessionService.onlyAdminsOrUsuariosWithIisOwnData(oProyectoEntityFromDatabase.getUsuario().getId());
         oProyectoRepository.deleteById(id);
         return id;
     }
@@ -96,4 +106,5 @@ public class ProyectoService {
         oProyectoRepository.flush();
         return oProyectoRepository.count();
     }
+
 }
