@@ -1,8 +1,6 @@
 package net.ausiasmarch.tareas.entity;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -32,37 +30,41 @@ public class ProyectoEntity {
     @Size(max = 2048)
     private String nombre;
 
-    @OneToMany(mappedBy = "proyecto", fetch = jakarta.persistence.FetchType.LAZY)
-    private List<TareaEntity> tareas;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    private LocalDateTime fecha_inicio;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-private LocalDateTime fecha_inicio;
+    private LocalDateTime fecha_fin;
 
-@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-private LocalDateTime fecha_fin;
-
-    private String speech;
-    
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     private UsuarioEntity usuario;
+
+    @OneToMany(mappedBy = "proyecto", fetch = jakarta.persistence.FetchType.LAZY)
+    private List<TareaEntity> tareas;
+
+    public ProyectoEntity() {
+        tareas = new java.util.ArrayList<>();
+    }
+
+     public ProyectoEntity(String nombre) {
+        this.nombre = nombre;
+        this.fecha_inicio = LocalDateTime.now();
+        this.fecha_fin = LocalDateTime.now();
+    }
 
     public ProyectoEntity(Long id, String nombre) {
         this.id = id;
         this.nombre = nombre;
         this.fecha_inicio = LocalDateTime.now();
-        this.fecha_fin = LocalDateTime.now().plus(Period.ofDays(7));
+        this.fecha_fin = LocalDateTime.now();
     }
 
-    public ProyectoEntity(String nombre, Date fecha_inicio, Date fecha_fin) {
+    public ProyectoEntity(String nombre, UsuarioEntity usuario) {
         this.nombre = nombre;
         this.fecha_inicio = LocalDateTime.now();
-        this.fecha_fin = LocalDateTime.now().plus(Period.ofDays(7));
-    }
-
-    public ProyectoEntity(String speech, UsuarioEntity oneRandom) {
-        this.speech = speech;
-    this.usuario = oneRandom;
+        this.fecha_fin = LocalDateTime.now();
+        this.usuario = usuario;
     }
 
     public Long getId() {
@@ -79,6 +81,18 @@ private LocalDateTime fecha_fin;
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public UsuarioEntity getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(UsuarioEntity usuario) {
+        this.usuario = usuario;
+    }
+
+    public int getTareas() {
+        return tareas.size();
     }
 
 }
