@@ -39,13 +39,13 @@ CREATE TABLE `tarea` (
 
 -- Insertar datos en la tabla `usuario`
 INSERT INTO usuario (nombre, apellidos, username, puesto, password) 
-VALUES ('Juan', 'Perez', 'juanperez', 1, '123456');
+VALUES ('Juan', 'Perez', 'juanperez', 1, 'e2cac5c5f7e52ab03441bb70e89726ddbd1f6e5b683dde05fb65e0720290179e');
 
 INSERT INTO usuario (nombre, apellidos, username, puesto, password) 
-VALUES ('Maria', 'Lopez', 'marialopez', 0, '123456');
+VALUES ('Maria', 'Lopez', 'marialopez', 0, 'e2cac5c5f7e52ab03441bb70e89726ddbd1f6e5b683dde05fb65e0720290179e');
 
 INSERT INTO usuario (nombre, apellidos, username, puesto, password)
-VALUES ('Pedro', 'Gomez', 'pedrogomez', 0, '123456');
+VALUES ('Pedro', 'Gomez', 'pedrogomez', 0, 'e2cac5c5f7e52ab03441bb70e89726ddbd1f6e5b683dde05fb65e0720290179e');
 
 -- Insertar datos en la tabla 'proyecto'
 INSERT INTO proyecto (nombre, fecha_inicio, fecha_fin, usuario_id)
