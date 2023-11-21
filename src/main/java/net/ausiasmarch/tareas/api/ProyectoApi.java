@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.ausiasmarch.tareas.entity.ProyectoEntity;
@@ -45,8 +46,9 @@ public class ProyectoApi {
     }
 
     @GetMapping("")
-    public ResponseEntity<Page<ProyectoEntity>> getPage(Pageable oPageable) {
-        return ResponseEntity.ok(oProyectoService.getPage(oPageable, null));
+    public ResponseEntity<Page<ProyectoEntity>> getPage(Pageable oPageable,
+            @RequestParam(value = "usuario", defaultValue = "0", required = false) Long usuario_id) {
+        return ResponseEntity.ok(oProyectoService.getPage(oPageable, usuario_id));
     }
 
     @PostMapping("/populate/{amount}")
@@ -57,6 +59,12 @@ public class ProyectoApi {
     @DeleteMapping("/empty")
     public ResponseEntity<Long> empty() {
         return ResponseEntity.ok(oProyectoService.empty());
+    }
+
+    @GetMapping("/byTareasNumberDesc")
+    public ResponseEntity<Page<ProyectoEntity>> getPageByRepliesNumberDesc(Pageable oPageable,
+            @RequestParam(value = "usuario", defaultValue = "0", required = false) Long usuario_id) {
+        return ResponseEntity.ok(oProyectoService.getPageByTareasNumberDesc(oPageable, usuario_id));
     }
 
 }
