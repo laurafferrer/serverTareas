@@ -24,8 +24,9 @@ import net.ausiasmarch.tareas.service.ProyectoService;
 @RestController
 @RequestMapping("/proyecto")
 public class ProyectoApi {
+    
     @Autowired
-    ProyectoService oProyectoService;
+    private ProyectoService oProyectoService;
 
     @GetMapping("/{id}")
     public ResponseEntity<ProyectoEntity> get(@PathVariable("id") Long id) {

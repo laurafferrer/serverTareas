@@ -3,7 +3,6 @@ package net.ausiasmarch.tareas.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
@@ -16,7 +15,7 @@ import net.ausiasmarch.tareas.repository.UsuarioRepository;
 @Service
 public class TareaService {
 
-     @Autowired
+    @Autowired
     TareaRepository oTareaRepository;
 
     @Autowired
