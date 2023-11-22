@@ -8,15 +8,19 @@ import org.springframework.stereotype.Service;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import net.ausiasmarch.tareas.entity.TareaEntity;
+import net.ausiasmarch.tareas.entity.UsuarioEntity;
 import net.ausiasmarch.tareas.exception.ResourceNotFoundException;
-import net.ausiasmarch.tareas.helper.DataGenerationHelper;
 import net.ausiasmarch.tareas.repository.TareaRepository;
+import net.ausiasmarch.tareas.repository.UsuarioRepository;
 
 @Service
 public class TareaService {
 
      @Autowired
     TareaRepository oTareaRepository;
+
+    @Autowired
+    UsuarioRepository oUsuarioRepository;
 
     @Autowired
     HttpServletRequest oHttpServletRequest;
@@ -28,21 +32,39 @@ public class TareaService {
         return oTareaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Tarea not found"));
     }
 
-    public Page<TareaEntity> getPage(Pageable oPageable) {
-        oSessionService.onlyAdmins();
-        return oTareaRepository.findAll(oPageable);
-    }
-
     public Long create(TareaEntity oTareaEntity) {
         oSessionService.onlyAdmins();
         oTareaEntity.setId(null);
+
+        if (oSessionService.isUsuario()) {
+            oTareaEntity.setUsuario(oSessionService.getSessionUsuario());
+        }
+
         return oTareaRepository.save(oTareaEntity).getId();
     }
 
+    public TareaEntity update(TareaEntity tareaEntity) {
+
+        TareaEntity oTareaEntityFromDatabase = this.get(tareaEntity.getId());
+        oSessionService.onlyAdminsOrUsuariosWithIisOwnData(oTareaEntityFromDatabase.getUsuario().getId());
+        if (oSessionService.isUsuario()) {
+            tareaEntity.setUsuario(oSessionService.getSessionUsuario());
+            return oTareaRepository.save(tareaEntity);
+        } else {
+            return oTareaRepository.save(tareaEntity);
+        }
+    }
+
     public Long delete(Long id) {
-        oSessionService.onlyAdmins();
+        TareaEntity oTareaEntityFromDatabase = this.get(id);
+        oSessionService.onlyAdminsOrUsuariosWithIisOwnData(oTareaEntityFromDatabase.getUsuario().getId());
         oTareaRepository.deleteById(id);
         return id;
+    }
+
+    public Page<TareaEntity> getPage(Pageable oPageable) {
+        oSessionService.onlyAdmins();
+        return oTareaRepository.findAll(oPageable);
     }
 
     public TareaEntity getOneRandom() {
@@ -53,11 +75,18 @@ public class TareaService {
 
     public Long populate(Integer amount) {
         oSessionService.onlyAdmins();
+        UsuarioEntity usuarioPorDefecto = oUsuarioRepository.findById(1L)
+                .orElseThrow(() -> new IllegalArgumentException("No se encontró un cliente por defecto con ID 1"));
+
         for (int i = 0; i < amount; i++) {
-            String nombre = DataGenerationHelper.generateNombreTarea().substring(0, 3);
-            oTareaRepository.save(new TareaEntity(nombre));
+            TareaEntity tarea = new TareaEntity();
+
+            tarea.setUsuario(usuarioPorDefecto);
+            tarea.setNombre("tarea inicial");
+            oTareaRepository.save(tarea);
         }
-        return oTareaRepository.count();
+
+        return amount.longValue();
     }
 
     @Transactional
@@ -65,10 +94,7 @@ public class TareaService {
         oSessionService.onlyAdmins();
         oTareaRepository.deleteAll();
         oTareaRepository.resetAutoIncrement();
-        TareaEntity oTareaEntity1 = new TareaEntity(1L, "Tarea prueba");
-        oTareaRepository.save(oTareaEntity1);
-        oTareaEntity1 = new TareaEntity(2L, "Tarea prueba 2");
-        oTareaRepository.save(oTareaEntity1);
+        oTareaRepository.flush();
         return oTareaRepository.count();
     }
 

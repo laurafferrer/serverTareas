@@ -27,21 +27,17 @@ public class UsuarioService {
     SessionService oSessionService;
 
     public UsuarioEntity get(Long id) {
-        return oUsuarioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        return oUsuarioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Usuario not found"));
     }
 
     public UsuarioEntity getByUsername(String username) {
         return oUsuarioRepository.findByUsername(username)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found by username"));
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario not found by username"));
     }
 
     public Page<UsuarioEntity> getPage(Pageable oPageable) {
         oSessionService.onlyAdmins();
         return oUsuarioRepository.findAll(oPageable);
-    }
-
-    public Page<UsuarioEntity> getPageByTareasNumberDesc(Pageable oPageable) {
-        return oUsuarioRepository.findUsuariosByTareasNumberDescFilter(oPageable);
     }
 
     public Long create(UsuarioEntity oUsuarioEntity) {

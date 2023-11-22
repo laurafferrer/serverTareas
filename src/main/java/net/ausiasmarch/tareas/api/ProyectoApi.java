@@ -1,5 +1,7 @@
 package net.ausiasmarch.tareas.api;
 
+import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,7 +34,9 @@ public class ProyectoApi {
 
     @PostMapping("")
     public ResponseEntity<Long> create(@RequestBody ProyectoEntity oProyectoEntity) {
-        return ResponseEntity.ok(oProyectoService.create(oProyectoEntity));
+        oProyectoEntity.setFechaInicio(LocalDateTime.now());
+        Long idFechaCreada = oProyectoService.create(oProyectoEntity);
+        return ResponseEntity.ok(idFechaCreada);
     }
 
     @PutMapping("")
@@ -59,12 +63,6 @@ public class ProyectoApi {
     @DeleteMapping("/empty")
     public ResponseEntity<Long> empty() {
         return ResponseEntity.ok(oProyectoService.empty());
-    }
-
-    @GetMapping("/byTareasNumberDesc")
-    public ResponseEntity<Page<ProyectoEntity>> getPageByRepliesNumberDesc(Pageable oPageable,
-            @RequestParam(value = "usuario", defaultValue = "0", required = false) Long usuario_id) {
-        return ResponseEntity.ok(oProyectoService.getPageByTareasNumberDesc(oPageable, usuario_id));
     }
 
 }

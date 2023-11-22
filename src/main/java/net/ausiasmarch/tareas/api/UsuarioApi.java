@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import net.ausiasmarch.tareas.entity.UsuarioEntity;
 import net.ausiasmarch.tareas.service.UsuarioService;
 
@@ -63,11 +62,6 @@ public class UsuarioApi {
     @DeleteMapping("/empty")
     public ResponseEntity<Long> empty() {
         return ResponseEntity.ok(oUsuarioService.empty());
-    }
-
-    @GetMapping("/byTareasNumberDesc")
-    public ResponseEntity<Page<UsuarioEntity>> getPageByTareasNumberDesc(Pageable oPageable) {
-        return ResponseEntity.ok(oUsuarioService.getPageByTareasNumberDesc(oPageable));
     }
 
 }

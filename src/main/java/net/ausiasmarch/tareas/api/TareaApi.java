@@ -1,5 +1,7 @@
 package net.ausiasmarch.tareas.api;
 
+import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,13 +17,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.ausiasmarch.tareas.entity.TareaEntity;
+import net.ausiasmarch.tareas.helper.DataGenerationHelper;
 import net.ausiasmarch.tareas.service.TareaService;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/tarea")
 public class TareaApi {
-
     @Autowired
     TareaService oTareaService;
 
@@ -34,11 +36,11 @@ public class TareaApi {
     public ResponseEntity<Long> create(@RequestBody TareaEntity oTareaEntity) {
         return ResponseEntity.ok(oTareaService.create(oTareaEntity));
     }
-/*
+
     @PutMapping("")
     public ResponseEntity<TareaEntity> update(@RequestBody TareaEntity oTareaEntity) {
         return ResponseEntity.ok(oTareaService.update(oTareaEntity));
-    }*/
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Long> delete(@PathVariable("id") Long id) {

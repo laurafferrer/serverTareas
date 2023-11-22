@@ -44,13 +44,9 @@ public class UsuarioEntity {
     private Boolean puesto = false;
 
     @OneToMany(mappedBy = "usuario", fetch = jakarta.persistence.FetchType.LAZY)
-    private List<ProyectoEntity> proyectos;
-
-    @OneToMany(mappedBy = "usuario", fetch = jakarta.persistence.FetchType.LAZY)
     private List<TareaEntity> tareas;
 
     public UsuarioEntity() {
-        proyectos = new ArrayList<>();
         tareas = new ArrayList<>();
     }
 
@@ -123,14 +119,9 @@ public class UsuarioEntity {
     public void setPuesto(Boolean puesto) {
         this.puesto = puesto;
     }
-
-    public List<ProyectoEntity> getProyectos() {
-        return proyectos;
+    
+    public int getTareas() {
+        return tareas.size();
     }
     
-    public List<TareaEntity> getTareas() {
-        return tareas;
-    }
-    
-
 }

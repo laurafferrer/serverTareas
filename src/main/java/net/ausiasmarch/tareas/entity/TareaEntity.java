@@ -29,8 +29,15 @@ public class TareaEntity {
     private String nombre;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "usuario_id")
+    @JoinColumn(name = "id_usuario")
     private UsuarioEntity usuario;
+
+    @OneToMany(mappedBy = "tarea", fetch = jakarta.persistence.FetchType.LAZY)
+    private List<ProyectoEntity> proyectos;
+
+    public TareaEntity() {
+        proyectos = new java.util.ArrayList<>();
+    }
 
     public TareaEntity(Long id, String nombre) {
         this.id = id;
@@ -56,5 +63,17 @@ public class TareaEntity {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }  
+
+    public UsuarioEntity getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(UsuarioEntity usuario) {
+        this.usuario = usuario;
+    }
+
+    public int getProyectos() {
+        return proyectos.size();
+    }
 
 }

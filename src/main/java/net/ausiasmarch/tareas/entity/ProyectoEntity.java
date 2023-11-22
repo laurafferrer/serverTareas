@@ -1,7 +1,6 @@
 package net.ausiasmarch.tareas.entity;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -11,7 +10,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -34,16 +32,10 @@ public class ProyectoEntity {
     private LocalDateTime fecha_inicio;
 
     @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    private UsuarioEntity usuario;
-
-    @ManyToOne
-    @JoinColumn(name = "tarea_id")
+    @JoinColumn(name = "id_tarea")
     private TareaEntity tarea;
 
-     public ProyectoEntity(String nombre) {
-        this.nombre = nombre;
-        this.fecha_inicio = LocalDateTime.now();
+    public ProyectoEntity() {
     }
 
     public ProyectoEntity(Long id, String nombre) {
@@ -52,10 +44,10 @@ public class ProyectoEntity {
         this.fecha_inicio = LocalDateTime.now();
     }
 
-    public ProyectoEntity(String nombre, UsuarioEntity usuario) {
+    public ProyectoEntity(String nombre, LocalDateTime fecha_inicio, TareaEntity tarea) {
         this.nombre = nombre;
         this.fecha_inicio = LocalDateTime.now();
-        this.usuario = usuario;
+        this.tarea = tarea;
     }
 
     public Long getId() {
@@ -74,12 +66,12 @@ public class ProyectoEntity {
         this.nombre = nombre;
     }
 
-    public UsuarioEntity getUsuario() {
-        return usuario;
+    public LocalDateTime getFechaInicio() {
+        return fecha_inicio;
     }
 
-    public void setUsuario(UsuarioEntity usuario) {
-        this.usuario = usuario;
+    public void setFechaInicio(LocalDateTime fecha_inicio) {
+        this.fecha_inicio = fecha_inicio;
     }
 
     public TareaEntity getTarea() {

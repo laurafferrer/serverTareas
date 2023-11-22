@@ -77,11 +77,4 @@ public class DataGenerationHelper {
         return sentences;
     }
 
-    public static LocalDateTime getRandomDate() {
-        long minDay = LocalDate.of(2020, 1, 1).toEpochDay();
-        long maxDay = LocalDate.of(2023, 10, 31).toEpochDay();
-        long randomDay = ThreadLocalRandom.current().nextLong(minDay, maxDay);
-        return LocalDate.ofEpochDay(randomDay).atTime(getRandomInt(0, 23), getRandomInt(0, 59), getRandomInt(0, 59));
-    }
-
 }

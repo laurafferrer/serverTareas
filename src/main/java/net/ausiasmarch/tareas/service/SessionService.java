@@ -21,7 +21,7 @@ public class SessionService {
 
     public String login(UsuarioBean oUsuarioBean) {
         oUsuarioRepository.findByUsernameAndPassword(oUsuarioBean.getUsername(), oUsuarioBean.getPassword())
-                .orElseThrow(() -> new ResourceNotFoundException("Wrong User or password"));
+                .orElseThrow(() -> new ResourceNotFoundException("Wrong usuario or password"));
         return JWTHelper.generateJWT(oUsuarioBean.getUsername());
     }
 
@@ -52,7 +52,7 @@ public class SessionService {
     public Boolean isAdmin() {
         if (this.getSessionUsername() != null) {
             UsuarioEntity oUsuarioEntityInSession = oUsuarioRepository.findByUsername(this.getSessionUsername())
-                    .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                    .orElseThrow(() -> new ResourceNotFoundException("Usuario not found"));
             return Boolean.FALSE.equals(oUsuarioEntityInSession.getPuesto());
         } else {
             return false;
@@ -62,7 +62,7 @@ public class SessionService {
     public Boolean isUsuario() {
         if (this.getSessionUsername() != null) {
             UsuarioEntity oUsuarioEntityInSession = oUsuarioRepository.findByUsername(this.getSessionUsername())
-                    .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                    .orElseThrow(() -> new ResourceNotFoundException("Usuario not found"));
             return Boolean.TRUE.equals(oUsuarioEntityInSession.getPuesto());
         } else {
             return false;

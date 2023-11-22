@@ -1,17 +1,18 @@
 package net.ausiasmarch.tareas.service;
 
+import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import jakarta.servlet.http.HttpServletRequest;
 import net.ausiasmarch.tareas.entity.ProyectoEntity;
+import net.ausiasmarch.tareas.entity.TareaEntity;
 import net.ausiasmarch.tareas.exception.ResourceNotFoundException;
-import net.ausiasmarch.tareas.helper.DataGenerationHelper;
 import net.ausiasmarch.tareas.repository.ProyectoRepository;
-import net.ausiasmarch.tareas.repository.UsuarioRepository;
+import net.ausiasmarch.tareas.repository.TareaRepository;
 
 @Service
 public class ProyectoService {
@@ -19,83 +20,60 @@ public class ProyectoService {
     ProyectoRepository oProyectoRepository;
 
     @Autowired
-    HttpServletRequest oHttpServletRequest;
-
-    @Autowired
-    UsuarioRepository oUsuarioRepository;
-
-    @Autowired
-    UsuarioService oUsuarioService;
+    TareaRepository oTareaRepository;
 
     @Autowired
     SessionService oSessionService;
+
+    @Autowired
+    HttpServletRequest oHttpServletRequest;
+
+    @Autowired
+    UsuarioService oUsuarioService;
 
     public ProyectoEntity get(Long id) {
         return oProyectoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Proyecto not found"));
     }
 
-    public Page<ProyectoEntity> getPage(Pageable oPageable, Long usuario_id) {
-        if (usuario_id == 0) {
-            return oProyectoRepository.findAll(oPageable);
-        } else {
-            return oProyectoRepository.findByUsuarioId(usuario_id, oPageable);
-        }
-    }
-
-    public Page<ProyectoEntity> getPageByTareasNumberDesc(Pageable oPageable, Long usuario_id) {
-        if (usuario_id == 0) {
-            return oProyectoRepository.findProyectosByTareasNumberDesc(oPageable);
-        } else {
-            return oProyectoRepository.findProyectosByTareasNumberDescFilterByUsuarioId(usuario_id, oPageable);
-        }
-    }
-
-
     public Long create(ProyectoEntity oProyectoEntity) {
+        oSessionService.onlyAdmins();
         oProyectoEntity.setId(null);
-        oSessionService.onlyAdminsOrUsuarios();
-        if (oSessionService.isUsuario()) {
-            oProyectoEntity.setUsuario(oSessionService.getSessionUsuario());
-            return oProyectoRepository.save(oProyectoEntity).getId();
-        } else {
-            return oProyectoRepository.save(oProyectoEntity).getId();
-        }
+        return oProyectoRepository.save(oProyectoEntity).getId();
     }
 
-    public ProyectoEntity update(ProyectoEntity oProyectoEntityToSet) {
-        ProyectoEntity oProyectoEntityFromDatabase = this.get(oProyectoEntityToSet.getId());
-        oSessionService.onlyAdminsOrUsuariosWithIisOwnData(oProyectoEntityFromDatabase.getUsuario().getId());
-        if (oSessionService.isUsuario()) {
-            if (oProyectoEntityToSet.getUsuario().getId().equals(oSessionService.getSessionUsuario().getId())) {
-                return oProyectoRepository.save(oProyectoEntityToSet);
-            } else {
-                throw new ResourceNotFoundException("Unauthorized");
-            }
-        } else {
-            return oProyectoRepository.save(oProyectoEntityToSet);
+    public ProyectoEntity update(ProyectoEntity oProyectoEntity) {
+        oSessionService.onlyAdmins();
+        if (oProyectoEntity.getId() == null) {
+            throw new ResourceNotFoundException("Proyecto id cannot be null for an update");
         }
+        return oProyectoRepository.save(oProyectoEntity);
     }
 
     public Long delete(Long id) {
+        oSessionService.onlyAdmins();
         ProyectoEntity oProyectoEntityFromDatabase = this.get(id);
-        oSessionService.onlyAdminsOrUsuariosWithIisOwnData(oProyectoEntityFromDatabase.getUsuario().getId());
+        oSessionService.onlyAdminsOrUsuariosWithIisOwnData(oProyectoEntityFromDatabase.getTarea().getId());
         oProyectoRepository.deleteById(id);
         return id;
     }
 
-    public Long populate(Integer amount) {
-        oSessionService.onlyAdmins();
-        for (int i = 0; i < amount; i++) {
-            oProyectoRepository
-                    .save(new ProyectoEntity(DataGenerationHelper.getSpeech(1), oUsuarioService.getOneRandom()));
-        }
-        return oProyectoRepository.count();
+    public Page<ProyectoEntity> getPage(Pageable oPageable, Long usuario_id) {
+        return oProyectoRepository.findAll(oPageable);
     }
 
-    public ProyectoEntity getOneRandom() {
+    public Long populate(Integer amount) {
         oSessionService.onlyAdmins();
-        Pageable oPageable = PageRequest.of((int) (Math.random() * oProyectoRepository.count()), 1);
-        return oProyectoRepository.findAll(oPageable).getContent().get(0);
+        TareaEntity proyectoPorDefecto = oTareaRepository.findById(1L)
+                .orElseThrow(() -> new IllegalArgumentException("No se encontró un proyecto por defecto con ID 1"));
+        for (int i = 0; i < amount; i++) {
+            ProyectoEntity proyecto = new ProyectoEntity();
+            proyecto.setTarea(proyectoPorDefecto);
+            proyecto.setNombre("Proyecto inicial");
+            proyecto.setFechaInicio(LocalDateTime.now());
+
+            oProyectoRepository.save(proyecto);
+        }
+        return amount.longValue();
     }
 
     @Transactional
