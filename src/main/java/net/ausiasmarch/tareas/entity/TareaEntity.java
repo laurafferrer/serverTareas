@@ -1,11 +1,15 @@
 package net.ausiasmarch.tareas.entity;
 
+import java.util.List;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -18,36 +22,23 @@ public class TareaEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
     @NotNull
     @NotBlank
-    @Size(max = 2048)
-    String nombre;
+    @Size(min=3, max=255)
+    private String nombre;
 
-    @ManyToOne
-    @JoinColumn(name = "proyecto_id")
-    private ProyectoEntity proyecto;
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id")
     private UsuarioEntity usuario;
-
-    public TareaEntity() {
-    }
-
-    public TareaEntity(String nombre) {
-        this.nombre = nombre;
-    }
 
     public TareaEntity(Long id, String nombre) {
         this.id = id;
         this.nombre = nombre;
     }
 
-    public TareaEntity(String nombre, UsuarioEntity usuario, ProyectoEntity proyecto) {
+    public TareaEntity(String nombre) {
         this.nombre = nombre;
-        this.usuario = usuario;
-        this.proyecto = proyecto;
     }
 
     public Long getId() {
@@ -64,22 +55,6 @@ public class TareaEntity {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    public UsuarioEntity getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(UsuarioEntity usuario) {
-        this.usuario = usuario;
-    }
-
-    public ProyectoEntity getProyecto() {
-        return proyecto;
-    }
-
-    public void setProyecto(ProyectoEntity proyecto) {
-        this.proyecto = proyecto;
-    }
+    }  
 
 }

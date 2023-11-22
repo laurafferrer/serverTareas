@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.ausiasmarch.tareas.entity.TareaEntity;
@@ -22,6 +21,7 @@ import net.ausiasmarch.tareas.service.TareaService;
 @RestController
 @RequestMapping("/tarea")
 public class TareaApi {
+
     @Autowired
     TareaService oTareaService;
 
@@ -34,11 +34,11 @@ public class TareaApi {
     public ResponseEntity<Long> create(@RequestBody TareaEntity oTareaEntity) {
         return ResponseEntity.ok(oTareaService.create(oTareaEntity));
     }
-
+/*
     @PutMapping("")
     public ResponseEntity<TareaEntity> update(@RequestBody TareaEntity oTareaEntity) {
         return ResponseEntity.ok(oTareaService.update(oTareaEntity));
-    }
+    }*/
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Long> delete(@PathVariable("id") Long id) {
@@ -46,10 +46,8 @@ public class TareaApi {
     }
 
     @GetMapping("")
-    public ResponseEntity<Page<TareaEntity>> getPage(Pageable oPageable,
-            @RequestParam(value = "usuario", defaultValue = "0", required = false) Long usuario_id,
-            @RequestParam(value = "proyecto", defaultValue = "0", required = false) Long proyecto_id) {
-        return ResponseEntity.ok(oTareaService.getPage(oPageable, usuario_id, proyecto_id));
+    public ResponseEntity<Page<TareaEntity>> getPage(Pageable oPageable) {
+        return ResponseEntity.ok(oTareaService.getPage(oPageable));
     }
 
     @PostMapping("/populate/{amount}")
@@ -61,4 +59,6 @@ public class TareaApi {
     public ResponseEntity<Long> empty() {
         return ResponseEntity.ok(oTareaService.empty());
     }
+
+
 }

@@ -37,12 +37,9 @@ public class ProyectoEntity {
     @JoinColumn(name = "usuario_id")
     private UsuarioEntity usuario;
 
-    @OneToMany(mappedBy = "proyecto", fetch = jakarta.persistence.FetchType.LAZY)
-    private List<TareaEntity> tareas;
-
-    public ProyectoEntity() {
-        tareas = new java.util.ArrayList<>();
-    }
+    @ManyToOne
+    @JoinColumn(name = "tarea_id")
+    private TareaEntity tarea;
 
      public ProyectoEntity(String nombre) {
         this.nombre = nombre;
@@ -85,8 +82,12 @@ public class ProyectoEntity {
         this.usuario = usuario;
     }
 
-    public int getTareas() {
-        return tareas.size();
+    public TareaEntity getTarea() {
+        return tarea;
+    }
+
+    public void setTarea(TareaEntity tarea) {
+        this.tarea = tarea;
     }
 
 }

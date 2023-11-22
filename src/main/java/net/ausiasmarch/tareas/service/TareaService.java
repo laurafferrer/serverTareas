@@ -1,90 +1,61 @@
 package net.ausiasmarch.tareas.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import net.ausiasmarch.tareas.entity.TareaEntity;
 import net.ausiasmarch.tareas.exception.ResourceNotFoundException;
 import net.ausiasmarch.tareas.helper.DataGenerationHelper;
 import net.ausiasmarch.tareas.repository.TareaRepository;
-import net.ausiasmarch.tareas.repository.UsuarioRepository;
 
 @Service
 public class TareaService {
-    @Autowired
-    TareaRepository oTareaRepository;
 
-    @Autowired
-    UsuarioRepository oUsuarioRepository;
+     @Autowired
+    TareaRepository oTareaRepository;
 
     @Autowired
     HttpServletRequest oHttpServletRequest;
 
     @Autowired
-    ProyectoService oProyectoService;
-
-    @Autowired
-    UsuarioService oUsuarioService;
-
-    @Autowired
     SessionService oSessionService;
 
-   public TareaEntity get(Long id) {
+    public TareaEntity get(Long id) {
         return oTareaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Tarea not found"));
     }
 
-    public Page<TareaEntity> getPage(Pageable oPageable, Long usuario_id, Long proyecto_id) {
-        if (usuario_id == 0) {
-            if (proyecto_id == 0) {
-                return oTareaRepository.findAll(oPageable);
-            } else {
-                return oTareaRepository.findByProyectoId(proyecto_id, oPageable);
-            }
-        } else {
-            return oTareaRepository.findByUsuarioId(usuario_id, oPageable);
-        }
+    public Page<TareaEntity> getPage(Pageable oPageable) {
+        oSessionService.onlyAdmins();
+        return oTareaRepository.findAll(oPageable);
     }
 
     public Long create(TareaEntity oTareaEntity) {
-        oSessionService.onlyAdminsOrUsuarios();
+        oSessionService.onlyAdmins();
         oTareaEntity.setId(null);
-        if (oSessionService.isUsuario()) {
-            oTareaEntity.setUsuario(oSessionService.getSessionUsuario());
-            return oTareaRepository.save(oTareaEntity).getId();
-        } else {
-            if (oTareaEntity.getUsuario().getId() == null || oTareaEntity.getUsuario().getId() == 0) {
-                oTareaEntity.setUsuario(oSessionService.getSessionUsuario());
-            }
-            return oTareaRepository.save(oTareaEntity).getId();
-        }
-    }
-
-    public TareaEntity update(TareaEntity oTareaEntityToSet) {
-        TareaEntity oTareaEntityFromDatabase = this.get(oTareaEntityToSet.getId());
-        oSessionService.onlyAdminsOrUsuariosWithIisOwnData(oTareaEntityFromDatabase.getUsuario().getId());
-        if (oSessionService.isUsuario()) {
-            oTareaEntityToSet.setUsuario(oSessionService.getSessionUsuario());
-            return oTareaRepository.save(oTareaEntityToSet);
-        } else {
-            return oTareaRepository.save(oTareaEntityToSet);
-        }
+        return oTareaRepository.save(oTareaEntity).getId();
     }
 
     public Long delete(Long id) {
-        TareaEntity oTareaEntityFromDatabase = this.get(id);
-        oSessionService.onlyAdminsOrUsuariosWithIisOwnData(oTareaEntityFromDatabase.getUsuario().getId());
+        oSessionService.onlyAdmins();
         oTareaRepository.deleteById(id);
         return id;
+    }
+
+    public TareaEntity getOneRandom() {
+        oSessionService.onlyAdmins();
+        Pageable oPageable = PageRequest.of((int) (Math.random() * oTareaRepository.count()), 1);
+        return oTareaRepository.findAll(oPageable).getContent().get(0);
     }
 
     public Long populate(Integer amount) {
         oSessionService.onlyAdmins();
         for (int i = 0; i < amount; i++) {
-            oTareaRepository.save(new TareaEntity(DataGenerationHelper.getSpeech(1),
-                    oUsuarioService.getOneRandom(), oProyectoService.getOneRandom()));
+            String nombre = DataGenerationHelper.generateNombreTarea().substring(0, 3);
+            oTareaRepository.save(new TareaEntity(nombre));
         }
         return oTareaRepository.count();
     }
@@ -94,7 +65,10 @@ public class TareaService {
         oSessionService.onlyAdmins();
         oTareaRepository.deleteAll();
         oTareaRepository.resetAutoIncrement();
-        oTareaRepository.flush();
+        TareaEntity oTareaEntity1 = new TareaEntity(1L, "Tarea prueba");
+        oTareaRepository.save(oTareaEntity1);
+        oTareaEntity1 = new TareaEntity(2L, "Tarea prueba 2");
+        oTareaRepository.save(oTareaEntity1);
         return oTareaRepository.count();
     }
 
