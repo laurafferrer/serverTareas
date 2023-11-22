@@ -33,9 +33,6 @@ public class ProyectoEntity {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private LocalDateTime fecha_inicio;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-    private LocalDateTime fecha_fin;
-
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     private UsuarioEntity usuario;
@@ -50,20 +47,17 @@ public class ProyectoEntity {
      public ProyectoEntity(String nombre) {
         this.nombre = nombre;
         this.fecha_inicio = LocalDateTime.now();
-        this.fecha_fin = LocalDateTime.now();
     }
 
     public ProyectoEntity(Long id, String nombre) {
         this.id = id;
         this.nombre = nombre;
         this.fecha_inicio = LocalDateTime.now();
-        this.fecha_fin = LocalDateTime.now();
     }
 
     public ProyectoEntity(String nombre, UsuarioEntity usuario) {
         this.nombre = nombre;
         this.fecha_inicio = LocalDateTime.now();
-        this.fecha_fin = LocalDateTime.now();
         this.usuario = usuario;
     }
 
