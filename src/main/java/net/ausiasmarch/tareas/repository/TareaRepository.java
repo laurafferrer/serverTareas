@@ -9,7 +9,7 @@ import net.ausiasmarch.tareas.entity.TareaEntity;
 
 public interface TareaRepository extends JpaRepository<TareaEntity, Long> {
 
-    Page<TareaEntity> findByUsuarioId(Long id, Pageable pageable);
+    Page<TareaEntity> findByUserId(Long id, Pageable pageable);
 
     @Query(value = "SELECT t.*,count(pr.id) FROM tarea t, proyecto pr WHERE t.id = pr.id_tarea GROUP BY t.id ORDER BY COUNT(pr.id) desc", nativeQuery = true)
     Page<TareaEntity> findTareasByProyectosNumberDesc(Pageable pageable);

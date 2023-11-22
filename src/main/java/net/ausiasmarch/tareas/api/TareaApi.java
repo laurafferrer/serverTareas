@@ -1,7 +1,5 @@
 package net.ausiasmarch.tareas.api;
 
-import java.time.LocalDateTime;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.ausiasmarch.tareas.entity.TareaEntity;
-import net.ausiasmarch.tareas.helper.DataGenerationHelper;
 import net.ausiasmarch.tareas.service.TareaService;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)

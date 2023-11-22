@@ -1,9 +1,6 @@
 package net.ausiasmarch.tareas.helper;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class DataGenerationHelper {
 

@@ -67,12 +67,6 @@ public class TareaService {
         return oTareaRepository.findAll(oPageable);
     }
 
-    public TareaEntity getOneRandom() {
-        oSessionService.onlyAdmins();
-        Pageable oPageable = PageRequest.of((int) (Math.random() * oTareaRepository.count()), 1);
-        return oTareaRepository.findAll(oPageable).getContent().get(0);
-    }
-
     public Long populate(Integer amount) {
         oSessionService.onlyAdmins();
         UsuarioEntity usuarioPorDefecto = oUsuarioRepository.findById(1L)
