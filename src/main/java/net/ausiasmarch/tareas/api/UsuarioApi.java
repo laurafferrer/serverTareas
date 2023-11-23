@@ -29,7 +29,7 @@ public class UsuarioApi {
         return ResponseEntity.ok(oUsuarioService.get(id));
     }
 
-    @GetMapping("/byUsername/{username}")
+    @GetMapping("/byusername/{username}")
     public ResponseEntity<UsuarioEntity> get(@PathVariable("username") String username) {
         return ResponseEntity.ok(oUsuarioService.getByUsername(username));
     }
